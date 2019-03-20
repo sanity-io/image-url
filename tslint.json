@@ -5,7 +5,6 @@
     "no-submodule-imports": false,
     "object-literal-sort-keys": false,
     "member-access": false,
-    "no-empty": false,
-    "no-unused-variable": true
+    "no-empty": false
   }
 }
