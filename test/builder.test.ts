@@ -5,8 +5,8 @@ const urlFor = sanityImage()
   .projectId('zp7mbokg')
   .dataset('production')
 
-function stripPath(url) {
-  return url.split('?')[1]
+function stripPath(url: string | null): string {
+  return (url || '').split('?')[1] || ''
 }
 
 const cases = [
@@ -246,10 +246,17 @@ describe('builder', () => {
   })
 
   test('should throw on invalid fit mode', () => {
+    // @ts-ignore: Because we're throwing on invalids
     expect(() => urlFor.image(croppedImage()).fit('moo')).toThrowError(/Invalid fit mode "moo"/)
   })
 
   test('should throw on invalid crop mode', () => {
+    // @ts-ignore: Because we're throwing on invalids
     expect(() => urlFor.image(croppedImage()).crop('moo')).toThrowError(/Invalid crop mode "moo"/)
+  })
+
+  test('should throw on invalid auto mode', () => {
+    // @ts-ignore: Because we're throwing on invalids
+    expect(() => urlFor.image(croppedImage()).auto('moo')).toThrowError(/Invalid auto mode "moo"/)
   })
 })

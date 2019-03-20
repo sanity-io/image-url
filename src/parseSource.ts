@@ -1,11 +1,34 @@
+import {
+  SanityAsset,
+  SanityImageObject,
+  SanityImageSource,
+  SanityImageWithAssetStub,
+  SanityReference
+} from './types'
+
+const isRef = (src: SanityImageSource): src is SanityReference => {
+  const source = src as SanityReference
+  return source ? typeof source._ref === 'string' : false
+}
+
+const isAsset = (src: SanityImageSource): src is SanityAsset => {
+  const source = src as SanityAsset
+  return source ? typeof source._id === 'string' : false
+}
+
+const isAssetStub = (src: SanityImageSource): src is SanityImageWithAssetStub => {
+  const source = src as SanityImageWithAssetStub
+  return source && source.asset ? typeof source.asset.url === 'string' : false
+}
+
 // Convert an asset-id, asset or image to an image record suitable for processing
 // eslint-disable-next-line complexity
-export default function parseSource(source) {
+export default function parseSource(source?: SanityImageSource) {
   if (!source) {
     return null
   }
 
-  let image
+  let image: SanityImageObject
 
   if (typeof source === 'string' && isUrl(source)) {
     // Someone passed an existing image url?
@@ -17,25 +40,27 @@ export default function parseSource(source) {
     image = {
       asset: {_ref: source}
     }
-  } else if (typeof source._ref === 'string') {
+  } else if (isRef(source)) {
     // We just got passed an asset directly
     image = {
       asset: source
     }
-  } else if (source._id) {
+  } else if (isAsset(source)) {
     // If we were passed an image asset document
     image = {
       asset: {
-        _ref: source._id
+        _ref: source._id || ''
       }
     }
-  } else if (source.asset && source.asset.url && !source.asset._ref) {
+  } else if (isAssetStub(source)) {
+    // If we were passed a partial asset (`url`, but no `_id`)
     image = {
       asset: {
         _ref: urlToId(source.asset.url)
       }
     }
   } else if (typeof source.asset === 'object') {
+    // Probably an actual image with materialized asset
     image = source
   } else {
     // We got something that does not look like an image, or it is an image
@@ -43,33 +68,35 @@ export default function parseSource(source) {
     return null
   }
 
-  if (source.crop) {
-    image.crop = source.crop
+  const img = source as SanityImageObject
+  if (img.crop) {
+    image.crop = img.crop
   }
-  if (source.hotspot) {
-    image.hotspot = source.hotspot
+
+  if (img.hotspot) {
+    image.hotspot = img.hotspot
   }
 
   return applyDefaults(image)
 }
 
-function isUrl(url) {
+function isUrl(url: string) {
   return /^https?:\/\//.test(`${url}`)
 }
 
-function urlToId(url) {
+function urlToId(url: string) {
   const parts = url.split('/').slice(-1)
   return `image-${parts[0]}`.replace(/\.([a-z]+)$/, '-$1')
 }
 
 // Mock crop and hotspot if image lacks it
-function applyDefaults(image) {
+function applyDefaults(image: SanityImageObject) {
   if (image.crop && image.hotspot) {
-    return image
+    return image as Required<SanityImageObject>
   }
 
   // We need to pad in default values for crop or hotspot
-  const result = Object.assign({}, image)
+  const result = {...image}
 
   if (!result.crop) {
     result.crop = {
@@ -89,5 +116,5 @@ function applyDefaults(image) {
     }
   }
 
-  return result
+  return result as Required<SanityImageObject>
 }

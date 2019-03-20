@@ -1,19 +1,28 @@
 import parseSource from '../src/parseSource'
+import {SanityImageObject} from '../src/types'
 import {
+  assetDocument,
+  assetWithUrl,
+  croppedImage,
   imageWithNoCropSpecified,
   materializedAssetWithCrop,
-  croppedImage,
-  assetDocument,
-  noHotspotImage,
-  assetWithUrl
+  noHotspotImage
 } from './fixtures'
 
-function compareParsedSource(outputSource, expectedSource) {
-  expect(typeof outputSource).toBe('object')
-  expect(typeof outputSource.asset).toBe('object')
-  expect(outputSource.asset._ref).toEqual(expectedSource.asset._ref)
-  expect(outputSource).toHaveProperty('crop')
-  expect(outputSource).toHaveProperty('hotspot')
+function compareParsedSource(
+  outputSrc: SanityImageObject | null,
+  expectedSrc: SanityImageObject | null
+) {
+  expect(outputSrc).not.toBe(null)
+  if (!outputSrc || !expectedSrc) {
+    return
+  }
+
+  expect(typeof outputSrc).toBe('object')
+  expect(typeof outputSrc.asset).toBe('object')
+  expect(outputSrc.asset._ref).toEqual(expectedSrc.asset._ref)
+  expect(outputSrc).toHaveProperty('crop')
+  expect(outputSrc).toHaveProperty('hotspot')
 }
 
 describe('parseSource', () => {

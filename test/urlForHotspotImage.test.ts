@@ -1,5 +1,5 @@
 import urlForHotspotImage from '../src/urlForImage'
-import {uncroppedImage, croppedImage, noHotspotImage, materializedAssetWithCrop} from './fixtures'
+import {croppedImage, materializedAssetWithCrop, noHotspotImage, uncroppedImage} from './fixtures'
 
 describe('urlForHotspotImage', () => {
   test('does not crop when no crop is required', () => {

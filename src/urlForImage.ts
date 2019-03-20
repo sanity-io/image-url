@@ -1,7 +1,17 @@
-import parseSource from './parseSource'
 import parseAssetId from './parseAssetId'
+import parseSource from './parseSource'
+import {
+  CropSpec,
+  HotspotSpec,
+  ImageUrlBuilderOptions,
+  ImageUrlBuilderOptionsWithAsset,
+  SanityAsset,
+  SanityImageFitResult,
+  SanityImageRect,
+  SanityReference
+} from './types'
 
-const SPEC_NAME_TO_URL_NAME_MAPPINGS = [
+export const SPEC_NAME_TO_URL_NAME_MAPPINGS = [
   ['width', 'w'],
   ['height', 'h'],
   ['format', 'fm'],
@@ -20,7 +30,7 @@ const SPEC_NAME_TO_URL_NAME_MAPPINGS = [
   ['auto', 'auto']
 ]
 
-export default function urlForImage(options) {
+export default function urlForImage(options: ImageUrlBuilderOptions) {
   let spec = {...(options || {})}
   const source = spec.source
   delete spec.source
@@ -30,16 +40,18 @@ export default function urlForImage(options) {
     return null
   }
 
-  const asset = parseAssetId(image.asset._ref || image.asset._id)
+  const id = (image.asset as SanityReference)._ref || (image.asset as SanityAsset)._id || ''
+  const asset = parseAssetId(id)
 
   // Compute crop rect in terms of pixel coordinates in the raw source image
+  const cropLeft = Math.round(image.crop.left * asset.width)
+  const cropTop = Math.round(image.crop.top * asset.height)
   const crop = {
-    left: Math.round(image.crop.left * asset.width),
-    top: Math.round(image.crop.top * asset.height)
+    left: cropLeft,
+    top: cropTop,
+    width: Math.round(asset.width - image.crop.right * asset.width - cropLeft),
+    height: Math.round(asset.height - image.crop.bottom * asset.height - cropTop)
   }
-
-  crop.width = Math.round(asset.width - image.crop.right * asset.width - crop.left)
-  crop.height = Math.round(asset.height - image.crop.bottom * asset.height - crop.top)
 
   // Compute hot spot rect in terms of pixel coordinates
   const hotSpotVerticalRadius = (image.hotspot.height * asset.height) / 2
@@ -53,19 +65,17 @@ export default function urlForImage(options) {
     bottom: hotSpotCenterY + hotSpotVerticalRadius
   }
 
-  spec.asset = asset
-
   // If irrelevant, or if we are requested to: don't perform crop/fit based on
   // the crop/hotspot.
   if (!(spec.rect || spec.focalPoint || spec.ignoreImageParams || spec.crop)) {
     spec = {...spec, ...fit({crop, hotspot}, spec)}
   }
 
-  return specToImageUrl(spec)
+  return specToImageUrl({...spec, asset})
 }
 
 // eslint-disable-next-line complexity
-function specToImageUrl(spec) {
+function specToImageUrl(spec: ImageUrlBuilderOptionsWithAsset) {
   const cdnUrl = spec.baseUrl || 'https://cdn.sanity.io'
   const filename = `${spec.asset.id}-${spec.asset.width}x${spec.asset.height}.${spec.asset.format}`
   const baseUrl = `${cdnUrl}/images/${spec.projectId}/${spec.dataset}/${filename}`
@@ -74,13 +84,12 @@ function specToImageUrl(spec) {
 
   if (spec.rect) {
     // Only bother url with a crop if it actually crops anything
+    const {left, top, width, height} = spec.rect
     const isEffectiveCrop =
-      spec.rect.left != 0 ||
-      spec.rect.top != 0 ||
-      spec.rect.height != spec.asset.height ||
-      spec.rect.width != spec.asset.width
+      left !== 0 || top !== 0 || height !== spec.asset.height || width !== spec.asset.width
+
     if (isEffectiveCrop) {
-      params.push(`rect=${spec.rect.left},${spec.rect.top},${spec.rect.width},${spec.rect.height}`)
+      params.push(`rect=${left},${top},${width},${height}`)
     }
   }
 
@@ -93,8 +102,9 @@ function specToImageUrl(spec) {
     params.push(`fp-x=${spec.focalPoint.y}`)
   }
 
-  if (spec.flipHorizontal || spec.flipVertical) {
-    params.push(`flip=${spec.flipHorizontal ? 'h' : ''}${spec.flipVertical ? 'v' : ''}`)
+  const flip = [spec.flipHorizontal && 'h', spec.flipVertical && 'v'].filter(Boolean).join('')
+  if (flip) {
+    params.push(`flip=${flip}`)
   }
 
   // Map from spec name to url param name, and allow using the actual param name as an alternative
@@ -114,23 +124,25 @@ function specToImageUrl(spec) {
   return `${baseUrl}?${params.join('&')}`
 }
 
-function fit(source, spec) {
-  const result = {
-    width: spec.width,
-    height: spec.height
-  }
+function fit(
+  source: {crop: CropSpec; hotspot: HotspotSpec},
+  spec: ImageUrlBuilderOptions
+): SanityImageFitResult {
+  let cropRect: SanityImageRect
+
+  const imgWidth = spec.width
+  const imgHeight = spec.height
 
   // If we are not constraining the aspect ratio, we'll just use the whole crop
-  if (!(spec.width && spec.height)) {
-    result.rect = source.crop
-    return result
+  if (!(imgWidth && imgHeight)) {
+    return {width: imgWidth, height: imgHeight, rect: source.crop}
   }
 
   const crop = source.crop
   const hotspot = source.hotspot
 
   // If we are here, that means aspect ratio is locked and fitting will be a bit harder
-  const desiredAspectRatio = spec.width / spec.height
+  const desiredAspectRatio = imgWidth / imgHeight
   const cropAspectRatio = crop.width / crop.height
 
   if (cropAspectRatio > desiredAspectRatio) {
@@ -138,43 +150,54 @@ function fit(source, spec) {
     const height = crop.height
     const width = height * desiredAspectRatio
     const top = crop.top
+
     // Center output horizontally over hotspot
     const hotspotXCenter = (hotspot.right - hotspot.left) / 2 + hotspot.left
     let left = hotspotXCenter - width / 2
+
     // Keep output within crop
     if (left < crop.left) {
       left = crop.left
     } else if (left + width > crop.left + crop.width) {
       left = crop.left + crop.width - width
     }
-    result.rect = {
+
+    cropRect = {
       left: Math.round(left),
       top: Math.round(top),
       width: Math.round(width),
       height: Math.round(height)
     }
-    return result
+  } else {
+    // The crop is taller than the desired ratio, we are cutting from top and bottom
+    const width = crop.width
+    const height = width / desiredAspectRatio
+    const left = crop.left
+
+    // Center output vertically over hotspot
+    const hotspotYCenter = (hotspot.bottom - hotspot.top) / 2 + hotspot.top
+    let top = hotspotYCenter - height / 2
+
+    // Keep output rect within crop
+    if (top < crop.top) {
+      top = crop.top
+    } else if (top + height > crop.top + crop.height) {
+      top = crop.top + crop.height - height
+    }
+
+    cropRect = {
+      left: Math.max(0, Math.floor(left)),
+      top: Math.max(0, Math.floor(top)),
+      width: Math.round(width),
+      height: Math.round(height)
+    }
   }
-  // The crop is taller than the desired ratio, we are cutting from top and bottom
-  const width = crop.width
-  const height = width / desiredAspectRatio
-  const left = crop.left
-  // Center output vertically over hotspot
-  const hotspotYCenter = (hotspot.bottom - hotspot.top) / 2 + hotspot.top
-  let top = hotspotYCenter - height / 2
-  // Keep output rect within crop
-  if (top < crop.top) {
-    top = crop.top
-  } else if (top + height > crop.top + crop.height) {
-    top = crop.top + crop.height - height
+
+  return {
+    width: imgWidth,
+    height: imgHeight,
+    rect: cropRect
   }
-  result.rect = {
-    left: Math.max(0, Math.floor(left)),
-    top: Math.max(0, Math.floor(top)),
-    width: Math.round(width),
-    height: Math.round(height)
-  }
-  return result
 }
 
 // For backwards-compatibility
