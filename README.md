@@ -48,6 +48,8 @@ There are a huge number of useful options you can specify, like e.g. blur:
   <img src={urlFor(mysteryPerson.mugshot).width(200).height(200).blur(50).url()}>
 ```
 
+Note that the `url()` function needs to be the final one in order to output the url as a string.
+
 ## Builder methods
 
 ### `image(source)`
