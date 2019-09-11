@@ -176,6 +176,16 @@ const cases = [
   },
 
   {
+    name: 'dpr scaling',
+    url: stripPath(
+      urlFor
+        .image(noHotspotImage())
+        .dpr(3)
+        .url()
+    )
+  },
+
+  {
     name: 'sub zero top/left',
     url: stripPath(
       urlFor

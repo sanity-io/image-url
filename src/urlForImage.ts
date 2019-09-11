@@ -27,7 +27,8 @@ export const SPEC_NAME_TO_URL_NAME_MAPPINGS = [
   ['quality', 'q'],
   ['fit', 'fit'],
   ['crop', 'crop'],
-  ['auto', 'auto']
+  ['auto', 'auto'],
+  ['dpr', 'dpr']
 ]
 
 export default function urlForImage(options: ImageUrlBuilderOptions) {

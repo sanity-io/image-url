@@ -94,6 +94,11 @@ class ImageUrlBuilder {
     return this.withOptions({bg})
   }
 
+  // Set DPR scaling factor
+  dpr(dpr: number) {
+    return this.withOptions({dpr})
+  }
+
   // Specify the width of the image in pixels
   width(width: number) {
     return this.withOptions({width})

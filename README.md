@@ -122,6 +122,10 @@ Specifies how to crop the image. When specified, overrides any crop or hotspot i
 
 Configures the fit mode. See the [documentation](https://www.sanity.io/docs/reference/image-urls#fit-object-object) for details.
 
+### `dpr(value)`
+
+Specifies device pixel ratio scaling factor. From 1 to 3.
+
 ### `ignoreImageParams()`
 
 Ignore any specifications from the image record (i.e. crop and hotspot).

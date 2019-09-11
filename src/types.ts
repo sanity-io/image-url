@@ -2,6 +2,7 @@ export type ImageUrlBuilderOptions = Partial<SanityProjectDetails> & {
   baseUrl?: string
   source?: SanityImageSource
   bg?: string
+  dpr?: number
   width?: number
   height?: number
   focalPoint?: {x: number; y: number}
