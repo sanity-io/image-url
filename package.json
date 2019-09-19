@@ -6,7 +6,6 @@
   "main": "lib/node/index.js",
   "browser": "lib/browser/image-url.umd.js",
   "umd:main": "lib/browser/image-url.umd.js",
-  "module": "lib/browser/image-url.mjs",
   "typings": "lib/types/index.d.ts",
   "files": [
     "lib",
