@@ -27,6 +27,7 @@ export const SPEC_NAME_TO_URL_NAME_MAPPINGS = [
   ['quality', 'q'],
   ['fit', 'fit'],
   ['crop', 'crop'],
+  ['saturation', 'sat'],
   ['auto', 'auto'],
   ['dpr', 'dpr']
 ]
