@@ -23,6 +23,7 @@ export type ImageUrlBuilderOptions = Partial<SanityProjectDetails> & {
   ignoreImageParams?: boolean
   fit?: FitMode
   crop?: CropMode
+  saturation?: number
   auto?: AutoMode
 }
 
@@ -38,6 +39,7 @@ export type ImageUrlBuilderOptionsWithAliases = ImageUrlBuilderOptions & {
   'max-h'?: number
   'min-w'?: number
   'max-w'?: number
+  sat?: number
   [key: string]: any
 }
 
