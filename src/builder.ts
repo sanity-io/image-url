@@ -49,7 +49,7 @@ export default function urlBuilder(options?: SanityClient | SanityProjectDetails
   return new ImageUrlBuilder(null, options as ImageUrlBuilderOptions)
 }
 
-class ImageUrlBuilder {
+export class ImageUrlBuilder {
   public options: ImageUrlBuilderOptions
 
   constructor(parent: ImageUrlBuilder | null, options: ImageUrlBuilderOptions) {
