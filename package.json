@@ -26,6 +26,9 @@
     "test:prod": "npm run lint && npm run test -- --no-cache",
     "posttest": "npm run lint"
   },
+  "engines": {
+    "node": ">=10.0.0"
+  },
   "jest": {
     "transform": {
       ".(ts|tsx)": "ts-jest"
@@ -58,16 +61,16 @@
     "access": "public"
   },
   "devDependencies": {
-    "@types/jest": "^24.0.11",
+    "@types/jest": "^24.0.25",
     "@types/node": "^10.11.0",
-    "jest": "^24.5.0",
+    "jest": "^24.9.0",
     "microbundle": "^0.11.0",
-    "prettier": "^1.14.3",
-    "rimraf": "^2.6.2",
-    "ts-jest": "^24.0.0",
-    "tslint": "^5.11.0",
+    "prettier": "^1.19.1",
+    "rimraf": "^3.0.0",
+    "ts-jest": "^24.3.0",
+    "tslint": "^5.20.1",
     "tslint-config-prettier": "^1.15.0",
-    "typescript": "^3.3.4000"
+    "typescript": "^3.7.4"
   },
   "repository": {
     "type": "git",
