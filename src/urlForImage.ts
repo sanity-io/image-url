@@ -100,7 +100,7 @@ function specToImageUrl(spec: ImageUrlBuilderOptionsWithAsset) {
 
   if (spec.focalPoint) {
     params.push(`fp-x=${spec.focalPoint.x}`)
-    params.push(`fp-x=${spec.focalPoint.y}`)
+    params.push(`fp-y=${spec.focalPoint.y}`)
   }
 
   const flip = [spec.flipHorizontal && 'h', spec.flipVertical && 'v'].filter(Boolean).join('')
