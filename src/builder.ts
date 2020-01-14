@@ -204,6 +204,11 @@ class ImageUrlBuilder {
     return this.withOptions({crop: value})
   }
 
+  // Saturation
+  saturation(saturation: number) {
+    return this.withOptions({saturation})
+  }
+
   auto(value: AutoMode) {
     if (validAutoModes.indexOf(value) === -1) {
       throw new Error(`Invalid auto mode "${value}"`)
