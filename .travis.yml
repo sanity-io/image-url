@@ -3,8 +3,7 @@ cache:
   directories:
     - ~/.npm
 node_js:
-  - "11"
+  - "12"
   - "10"
-  - "8"
 script:
   - npm run test:prod
