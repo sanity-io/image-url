@@ -126,6 +126,10 @@ Configures the fit mode. See the [documentation](https://www.sanity.io/docs/refe
 
 Specifies device pixel ratio scaling factor. From 1 to 3.
 
+### `saturation(value)`
+
+Adjusts the saturation of the image. Currently the only supported value is `-100` - meaning it grayscales the image.
+
 ### `ignoreImageParams()`
 
 Ignore any specifications from the image record (i.e. crop and hotspot).
