@@ -19,7 +19,7 @@
     "prebuild": "rimraf lib",
     "build": "npm run build:node && npm run build:browser",
     "build:node": "tsc -m commonjs",
-    "build:browser": "microbundle build -o lib/browser -f umd,es --no-compress",
+    "build:browser": "microbundle build -i src/browser.ts -o lib/browser -f umd,es --no-compress",
     "lint": "tslint  --project tsconfig.json -t codeFrame 'src/**/*.ts' 'test/**/*.ts'",
     "test": "jest --coverage",
     "test:watch": "jest --coverage --watch",
