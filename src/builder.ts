@@ -220,7 +220,14 @@ export class ImageUrlBuilder {
 
   // Gets the url based on the submitted parameters
   url() {
-    return urlForImage(this.options)
+    const url = urlForImage(this.options)
+    if (!url) {
+      // tslint:disable-next-line:no-console
+      console.warn(`Unable to resolve image URL with options: ${JSON.stringify(this.options)}`)
+      return ''
+    }
+
+    return url
   }
 
   // Alias for url()

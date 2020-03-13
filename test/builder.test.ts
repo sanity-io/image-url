@@ -198,6 +198,15 @@ const cases = [
 ]
 
 describe('builder', () => {
+  beforeEach(() => {
+    jest.spyOn(global.console, "warn").mockImplementation(() => {})
+  })
+
+  afterEach(() => {
+    // @ts-ignore: It's a mock, the method mockRestore should exist on it
+    global.console.warn.mockRestore()
+  })
+
   cases.forEach((testCase) => {
     test(testCase.name, () => {
       expect(testCase.url).toMatchSnapshot()
@@ -217,5 +226,13 @@ describe('builder', () => {
   test('should throw on invalid auto mode', () => {
     // @ts-ignore: Because we're throwing on invalids
     expect(() => urlFor.image(croppedImage()).auto('moo')).toThrowError(/Invalid auto mode "moo"/)
+  })
+
+  test('should warn on unparsable options', () => {
+    // @ts-ignore: Because we're are triggering the warning
+    const url = urlFor.image(null).url()
+
+    expect(url).toBe("")
+    expect(global.console.warn).toHaveBeenCalledWith(expect.stringContaining('Unable to resolve image URL with options'))
   })
 })
