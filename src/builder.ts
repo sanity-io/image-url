@@ -37,7 +37,8 @@ export default function urlBuilder(options?: SanityClient | SanityProjectDetails
   const client = options as SanityClient
   if (isSanityClient(client)) {
     // Inherit config from client
-    const {apiHost, projectId, dataset} = client.clientConfig
+    const {apiHost: apiUrl, projectId, dataset} = client.clientConfig
+    const apiHost = apiUrl || 'https://api.sanity.io'
     return new ImageUrlBuilder(null, {
       baseUrl: apiHost.replace(/^https:\/\/api\./, 'https://cdn.'),
       projectId,

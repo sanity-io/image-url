@@ -16,7 +16,7 @@
   "amdName": "SanityImageUrlBuilder",
   "scripts": {
     "prepublishOnly": "npm run build",
-    "prebuild": "rimraf lib",
+    "prebuild": "rimraf lib coverage .rts2*",
     "build": "npm run build:node && npm run build:browser",
     "build:node": "tsc -m commonjs",
     "build:browser": "microbundle build -i src/browser.ts -o lib/browser -f umd,es --no-compress",
@@ -60,17 +60,20 @@
   "publishConfig": {
     "access": "public"
   },
+  "dependencies": {
+    "@sanity/client": "^1.149.7"
+  },
   "devDependencies": {
-    "@types/jest": "^24.0.25",
-    "@types/node": "^10.11.0",
-    "jest": "^24.9.0",
+    "@types/jest": "^25.2.1",
+    "@types/node": "^13.11.0",
+    "jest": "^25.2.7",
     "microbundle": "^0.11.0",
-    "prettier": "^1.19.1",
-    "rimraf": "^3.0.0",
-    "ts-jest": "^24.3.0",
-    "tslint": "^5.20.1",
+    "prettier": "^2.0.4",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^25.3.1",
+    "tslint": "^6.1.1",
     "tslint-config-prettier": "^1.15.0",
-    "typescript": "^3.7.4"
+    "typescript": "^3.8.3"
   },
   "repository": {
     "type": "git",

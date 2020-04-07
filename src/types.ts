@@ -1,3 +1,5 @@
+import {ClientConfig} from '@sanity/client'
+
 export type ImageUrlBuilderOptions = Partial<SanityProjectDetails> & {
   baseUrl?: string
   source?: SanityImageSource
@@ -64,9 +66,7 @@ export type AutoMode = 'format'
 export type Orientation = 0 | 90 | 180 | 270
 
 export interface SanityClient {
-  clientConfig: SanityProjectDetails & {
-    apiHost: string
-  }
+  clientConfig: ClientConfig
 }
 
 export type SanityImageSource =
