@@ -8,7 +8,7 @@ import {
   Orientation,
   SanityClient,
   SanityImageSource,
-  SanityProjectDetails
+  SanityProjectDetails,
 } from './types'
 import urlForImage, {SPEC_NAME_TO_URL_NAME_MAPPINGS} from './urlForImage'
 
@@ -42,7 +42,7 @@ export default function urlBuilder(options?: SanityClient | SanityProjectDetails
     return new ImageUrlBuilder(null, {
       baseUrl: apiHost.replace(/^https:\/\/api\./, 'https://cdn.'),
       projectId,
-      dataset
+      dataset,
     })
   }
 
@@ -223,7 +223,7 @@ export class ImageUrlBuilder {
     return urlForImage(this.options)
   }
 
-  // Synonym for url()
+  // Alias for url()
   toString() {
     return this.url()
   }

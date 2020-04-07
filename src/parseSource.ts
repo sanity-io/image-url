@@ -3,7 +3,7 @@ import {
   SanityImageObject,
   SanityImageSource,
   SanityImageWithAssetStub,
-  SanityReference
+  SanityReference,
 } from './types'
 
 const isRef = (src: SanityImageSource): src is SanityReference => {
@@ -33,31 +33,31 @@ export default function parseSource(source?: SanityImageSource) {
   if (typeof source === 'string' && isUrl(source)) {
     // Someone passed an existing image url?
     image = {
-      asset: {_ref: urlToId(source)}
+      asset: {_ref: urlToId(source)},
     }
   } else if (typeof source === 'string') {
     // Just an asset id
     image = {
-      asset: {_ref: source}
+      asset: {_ref: source},
     }
   } else if (isRef(source)) {
     // We just got passed an asset directly
     image = {
-      asset: source
+      asset: source,
     }
   } else if (isAsset(source)) {
     // If we were passed an image asset document
     image = {
       asset: {
-        _ref: source._id || ''
-      }
+        _ref: source._id || '',
+      },
     }
   } else if (isAssetStub(source)) {
     // If we were passed a partial asset (`url`, but no `_id`)
     image = {
       asset: {
-        _ref: urlToId(source.asset.url)
-      }
+        _ref: urlToId(source.asset.url),
+      },
     }
   } else if (typeof source.asset === 'object') {
     // Probably an actual image with materialized asset
@@ -103,7 +103,7 @@ function applyDefaults(image: SanityImageObject) {
       left: 0,
       top: 0,
       bottom: 0,
-      right: 0
+      right: 0,
     }
   }
 
@@ -112,7 +112,7 @@ function applyDefaults(image: SanityImageObject) {
       x: 0.5,
       y: 0.5,
       height: 1.0,
-      width: 1.0
+      width: 1.0,
     }
   }
 

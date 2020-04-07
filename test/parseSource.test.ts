@@ -6,7 +6,7 @@ import {
   croppedImage,
   imageWithNoCropSpecified,
   materializedAssetWithCrop,
-  noHotspotImage
+  noHotspotImage,
 } from './fixtures'
 
 function compareParsedSource(
@@ -63,11 +63,11 @@ describe('parseSource', () => {
   test('does not overwrite crop or hotspot settings', () => {
     expect(parseSource(materializedAssetWithCrop())).toMatchObject({
       asset: {
-        _ref: 'image-Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000-jpg'
+        _ref: 'image-Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000-jpg',
       },
       crop: {
-        bottom: 0.1
-      }
+        bottom: 0.1,
+      },
     })
   })
 

@@ -1,9 +1,7 @@
 import sanityImage from '../src/builder'
 import {croppedImage, imageWithNoCropSpecified, noHotspotImage} from './fixtures'
 
-const urlFor = sanityImage()
-  .projectId('zp7mbokg')
-  .dataset('production')
+const urlFor = sanityImage().projectId('zp7mbokg').dataset('production')
 
 function stripPath(url: string | null): string {
   return (url || '').split('?')[1] || ''
@@ -17,16 +15,16 @@ const cases = [
         _type: 'image',
         asset: {
           _ref: 'image-Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000-jpg',
-          _type: 'reference'
+          _type: 'reference',
         },
         hotspot: {
           height: 0.3,
           width: 0.3,
           x: 0.3,
-          y: 0.3
-        }
+          y: 0.3,
+        },
       })
-      .url()
+      .url(),
   },
   {
     name: 'handles crop but no hotspot',
@@ -35,16 +33,16 @@ const cases = [
         _type: 'image',
         asset: {
           _ref: 'image-Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000-jpg',
-          _type: 'reference'
+          _type: 'reference',
         },
         crop: {
           bottom: 0.1,
           left: 0.1,
           right: 0.1,
-          top: 0.1
-        }
+          top: 0.1,
+        },
       })
-      .url()
+      .url(),
   },
 
   {
@@ -54,12 +52,12 @@ const cases = [
         _type: 'image',
         asset: {
           _ref: 'image-Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000-jpg',
-          _type: 'reference'
+          _type: 'reference',
         },
         crop: null,
-        hotspot: null
+        hotspot: null,
       })
-      .url()
+      .url(),
   },
 
   {
@@ -68,121 +66,72 @@ const cases = [
       .image({
         _type: 'image',
         asset: {
-          _id: 'image-Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000-jpg'
+          _id: 'image-Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000-jpg',
         },
         crop: null,
-        hotspot: null
+        hotspot: null,
       })
-      .url()
+      .url(),
   },
 
   {
     name: 'constrains aspect ratio',
-    url: urlFor
-      .image(croppedImage())
-      .size(100, 80)
-      .url()
+    url: urlFor.image(croppedImage()).size(100, 80).url(),
   },
 
   {
     name: 'can be told to ignore hotspot',
-    url: urlFor
-      .image(croppedImage())
-      .ignoreImageParams()
-      .size(100, 80)
-      .url()
+    url: urlFor.image(croppedImage()).ignoreImageParams().size(100, 80).url(),
   },
 
   {
     name: 'toString() aliases url()',
-    url: urlFor
-      .image(croppedImage())
-      .ignoreImageParams()
-      .size(100, 80)
-      .toString()
+    url: urlFor.image(croppedImage()).ignoreImageParams().size(100, 80).toString(),
   },
 
   {
     name: 'skips hotspot/crop if crop mode specified',
-    url: urlFor
-      .image(croppedImage())
-      .size(100, 80)
-      .crop('center')
-      .url()
+    url: urlFor.image(croppedImage()).size(100, 80).crop('center').url(),
   },
 
   {
     name: 'skips hotspot/crop if focal point specified',
-    url: urlFor
-      .image(croppedImage())
-      .size(100, 80)
-      .focalPoint(10, 20)
-      .url()
+    url: urlFor.image(croppedImage()).size(100, 80).focalPoint(10, 20).url(),
   },
 
   {
     name: 'does not crop image with no crop/hotspot specified',
-    url: urlFor
-      .image(imageWithNoCropSpecified())
-      .width(80)
-      .url()
+    url: urlFor.image(imageWithNoCropSpecified()).width(80).url(),
   },
 
   {
     name: 'does crop image with no crop/hotspot specified if aspect ratio is forced',
-    url: urlFor
-      .image(imageWithNoCropSpecified())
-      .width(80)
-      .height(80)
-      .url()
+    url: urlFor.image(imageWithNoCropSpecified()).width(80).height(80).url(),
   },
 
   {
     name: 'can specify options with url params',
-    url: urlFor
-      .image(croppedImage())
-      .withOptions({w: 320, h: 240})
-      .url()
+    url: urlFor.image(croppedImage()).withOptions({w: 320, h: 240}).url(),
   },
 
   {
     name: 'flip horizontal',
-    url: stripPath(
-      urlFor
-        .image(noHotspotImage())
-        .flipHorizontal()
-        .url()
-    )
+    url: stripPath(urlFor.image(noHotspotImage()).flipHorizontal().url()),
   },
 
   {
     name: 'flip vertical',
-    url: stripPath(
-      urlFor
-        .image(noHotspotImage())
-        .flipVertical()
-        .url()
-    )
+    url: stripPath(urlFor.image(noHotspotImage()).flipVertical().url()),
   },
 
   {
     name: 'automatic format',
-    url: stripPath(
-      urlFor
-        .image(noHotspotImage())
-        .auto('format')
-        .url()
-    )
+    url: stripPath(urlFor.image(noHotspotImage()).auto('format').url()),
   },
 
   {
     name: 'dpr scaling',
-    url: stripPath(
-      urlFor
-        .image(noHotspotImage())
-        .dpr(3)
-        .url()
-    )
+    url: stripPath(urlFor.image(noHotspotImage()).dpr(3).url()),
   },
 
   {
@@ -193,7 +142,7 @@ const cases = [
         .width(1000)
         .height(805)
         .url()
-    )
+    ),
   },
 
   {
@@ -217,7 +166,7 @@ const cases = [
         .flipVertical()
         .fit('crop')
         .url()
-    )
+    ),
   },
 
   {
@@ -244,12 +193,12 @@ const cases = [
         .fit('crop')
         .crop('center')
         .url()
-    )
-  }
+    ),
+  },
 ]
 
 describe('builder', () => {
-  cases.forEach(testCase => {
+  cases.forEach((testCase) => {
     test(testCase.name, () => {
       expect(testCase.url).toMatchSnapshot()
     })

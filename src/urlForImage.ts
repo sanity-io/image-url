@@ -8,7 +8,7 @@ import {
   SanityAsset,
   SanityImageFitResult,
   SanityImageRect,
-  SanityReference
+  SanityReference,
 } from './types'
 
 export const SPEC_NAME_TO_URL_NAME_MAPPINGS = [
@@ -29,7 +29,7 @@ export const SPEC_NAME_TO_URL_NAME_MAPPINGS = [
   ['crop', 'crop'],
   ['saturation', 'sat'],
   ['auto', 'auto'],
-  ['dpr', 'dpr']
+  ['dpr', 'dpr'],
 ]
 
 export default function urlForImage(options: ImageUrlBuilderOptions) {
@@ -52,7 +52,7 @@ export default function urlForImage(options: ImageUrlBuilderOptions) {
     left: cropLeft,
     top: cropTop,
     width: Math.round(asset.width - image.crop.right * asset.width - cropLeft),
-    height: Math.round(asset.height - image.crop.bottom * asset.height - cropTop)
+    height: Math.round(asset.height - image.crop.bottom * asset.height - cropTop),
   }
 
   // Compute hot spot rect in terms of pixel coordinates
@@ -64,7 +64,7 @@ export default function urlForImage(options: ImageUrlBuilderOptions) {
     left: hotSpotCenterX - hotSpotHorizontalRadius,
     top: hotSpotCenterY - hotSpotVerticalRadius,
     right: hotSpotCenterX + hotSpotHorizontalRadius,
-    bottom: hotSpotCenterY + hotSpotVerticalRadius
+    bottom: hotSpotCenterY + hotSpotVerticalRadius,
   }
 
   // If irrelevant, or if we are requested to: don't perform crop/fit based on
@@ -110,7 +110,7 @@ function specToImageUrl(spec: ImageUrlBuilderOptionsWithAsset) {
   }
 
   // Map from spec name to url param name, and allow using the actual param name as an alternative
-  SPEC_NAME_TO_URL_NAME_MAPPINGS.forEach(mapping => {
+  SPEC_NAME_TO_URL_NAME_MAPPINGS.forEach((mapping) => {
     const [specName, param] = mapping
     if (typeof spec[specName] !== 'undefined') {
       params.push(`${param}=${encodeURIComponent(spec[specName])}`)
@@ -168,7 +168,7 @@ function fit(
       left: Math.round(left),
       top: Math.round(top),
       width: Math.round(width),
-      height: Math.round(height)
+      height: Math.round(height),
     }
   } else {
     // The crop is taller than the desired ratio, we are cutting from top and bottom
@@ -191,14 +191,14 @@ function fit(
       left: Math.max(0, Math.floor(left)),
       top: Math.max(0, Math.floor(top)),
       width: Math.round(width),
-      height: Math.round(height)
+      height: Math.round(height),
     }
   }
 
   return {
     width: imgWidth,
     height: imgHeight,
-    rect: cropRect
+    rect: cropRect,
   }
 }
 
