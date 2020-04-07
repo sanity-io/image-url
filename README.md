@@ -54,7 +54,7 @@ Note that the `url()` function needs to be the final one in order to output the 
 
 ### `image(source)`
 
-Specify the image to be rendered. Accepts either a Sanity `image` record, an `asset` record, or just the asset id as a string. In order for hotspot/crop processing to be applied, the `image` record must be supplied.
+Specify the image to be rendered. Accepts either a Sanity `image` record, an `asset` record, or just the asset id as a string. In order for hotspot/crop processing to be applied, the `image` record must be supplied, as well as both width and height.
 
 ### `dataset(dataset)`, `projectId(projectId)`
 
