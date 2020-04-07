@@ -8,7 +8,14 @@ import {
   uncroppedImage,
 } from './fixtures'
 
-describe('urlForHotspotImage', () => {
+describe('urlForImage', () => {
+  test('should throw on invalid source', () => {
+    // @ts-ignore: Because we're throwing on invalids
+    expect(() => urlForImage({source: {}}).toString()).toThrowError(
+      'Unable to resolve image URL from source ({})'
+    )
+  })
+
   test('does not crop when no crop is required', () => {
     expect(
       urlForImage({source: uncroppedImage(), projectId: 'zp7mbokg', dataset: 'production'})

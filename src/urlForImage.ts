@@ -33,14 +33,14 @@ export const SPEC_NAME_TO_URL_NAME_MAPPINGS = [
   ['pad', 'pad'],
 ]
 
-export default function urlForImage(options: ImageUrlBuilderOptions) {
+export default function urlForImage(options: ImageUrlBuilderOptions): string {
   let spec = {...(options || {})}
   const source = spec.source
   delete spec.source
 
   const image = parseSource(source)
   if (!image) {
-    return null
+    throw new Error(`Unable to resolve image URL from source (${JSON.stringify(source)})`)
   }
 
   const id = (image.asset as SanityReference)._ref || (image.asset as SanityAsset)._id || ''
