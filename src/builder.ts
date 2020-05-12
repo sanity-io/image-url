@@ -60,7 +60,7 @@ export class ImageUrlBuilder {
   }
 
   withOptions(options: Partial<ImageUrlBuilderOptionsWithAliases>) {
-    const baseUrl = options.baseUrl || ''
+    const baseUrl = options.baseUrl || this.options.baseUrl
 
     const newOptions: {[key: string]: any} = {baseUrl}
     for (const key in options) {
