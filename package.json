@@ -61,17 +61,17 @@
     "access": "public"
   },
   "dependencies": {
-    "@sanity/client": "^1.149.7"
+    "@sanity/client": "^1.149.13"
   },
   "devDependencies": {
     "@types/jest": "^25.2.1",
-    "@types/node": "^13.11.0",
-    "jest": "^25.2.7",
-    "microbundle": "^0.11.0",
-    "prettier": "^2.0.4",
+    "@types/node": "^13.13.5",
+    "jest": "^26.0.1",
+    "microbundle": "^0.12.0",
+    "prettier": "^2.0.5",
     "rimraf": "^3.0.2",
-    "ts-jest": "^25.3.1",
-    "tslint": "^6.1.1",
+    "ts-jest": "^25.5.1",
+    "tslint": "^6.1.2",
     "tslint-config-prettier": "^1.15.0",
     "typescript": "^3.8.3"
   },
