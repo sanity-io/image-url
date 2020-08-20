@@ -12,7 +12,7 @@ In addition to the core use case, this library provides a handy builder to acces
 
 ## Usage
 
-The most common way to use this library in your project is to configure it by passing it your configured sanityClient. That way it will automatically be preconfigured to your current project and dataset:
+The most common way to use this library in your project is to configure it by passing it [your configured sanityClient](https://www.npmjs.com/package/@sanity/client). That way it will automatically be preconfigured to your current project and dataset:
 
 ```js
 import React from 'react'
@@ -58,7 +58,7 @@ Specify the image to be rendered. Accepts either a Sanity `image` record, an `as
 
 ### `dataset(dataset)`, `projectId(projectId)`
 
-Usually you should preconfigure your builder with dataset and project id, but even whem you did, these let you temporarily override them if you need to render assets from other projects or datasets.
+Usually you should preconfigure your builder with dataset and project id, but even when you did, these let you temporarily override them if you need to render assets from other projects or datasets.
 
 ### `width(pixels)`
 
