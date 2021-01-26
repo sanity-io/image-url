@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`builder all hotspot/crop-compatible params 1`] = `"rect=200,300,1600,2400&flip=hv&fm=png&dl=a.png&blur=50&sharp=7&invert=true&or=90&min-h=150&max-h=300&min-w=100&max-w=200&q=50&fit=crop&auto=format"`;
+exports[`builder all hotspot/crop-compatible params 1`] = `"rect=200,300,1600,2400&flip=hv&fm=png&dl=a.png&blur=50&sharp=7&invert=true&or=90&min-h=150&max-h=300&min-w=100&max-w=200&q=50&fit=crop&auto=format&pad=40"`;
 
-exports[`builder all params 1`] = `"rect=10,20,30,40&bg=bf1942&fp-x=10&fp-y=20&flip=hv&fm=png&dl=a.png&blur=50&invert=true&or=90&min-h=150&max-h=300&min-w=100&max-w=200&q=50&fit=crop&crop=center&auto=format"`;
+exports[`builder all params 1`] = `"rect=10,20,30,40&bg=bf1942&fp-x=10&fp-y=20&flip=hv&fm=png&dl=a.png&blur=50&invert=true&or=90&min-h=150&max-h=300&min-w=100&max-w=200&q=50&fit=crop&crop=center&auto=format&pad=40"`;
 
 exports[`builder automatic format 1`] = `"auto=format"`;
 
@@ -29,6 +29,8 @@ exports[`builder handles crop but no hotspot 1`] = `"https://cdn.sanity.io/image
 exports[`builder handles hotspot but no crop 1`] = `"https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000.jpg"`;
 
 exports[`builder handles materialized assets (GraphQL) 1`] = `"https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000.jpg"`;
+
+exports[`builder pad 1`] = `"pad=50"`;
 
 exports[`builder skips hotspot/crop if crop mode specified 1`] = `"https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000.jpg?w=100&h=80&crop=center"`;
 

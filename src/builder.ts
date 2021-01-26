@@ -179,7 +179,7 @@ export class ImageUrlBuilder {
     return this.withOptions({flipHorizontal: true})
   }
 
-  // Flip image verically
+  // Flip image vertically
   flipVertical() {
     return this.withOptions({flipVertical: true})
   }
@@ -216,6 +216,11 @@ export class ImageUrlBuilder {
     }
 
     return this.withOptions({auto: value})
+  }
+
+  // Specify the number of pixels to pad the image
+  pad(pad: number) {
+    return this.withOptions({pad})
   }
 
   // Gets the url based on the submitted parameters
