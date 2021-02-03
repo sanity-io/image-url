@@ -30,6 +30,7 @@ export const SPEC_NAME_TO_URL_NAME_MAPPINGS = [
   ['saturation', 'sat'],
   ['auto', 'auto'],
   ['dpr', 'dpr'],
+  ['pad', 'pad'],
 ]
 
 export default function urlForImage(options: ImageUrlBuilderOptions) {

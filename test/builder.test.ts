@@ -125,6 +125,11 @@ const cases = [
   },
 
   {
+    name: 'pad',
+    url: stripPath(urlFor.image(noHotspotImage()).pad(50).url()),
+  },
+
+  {
     name: 'automatic format',
     url: stripPath(urlFor.image(noHotspotImage()).auto('format').url()),
   },
@@ -165,6 +170,7 @@ const cases = [
         .flipHorizontal()
         .flipVertical()
         .fit('crop')
+	.pad(40)
         .url()
     ),
   },
@@ -192,6 +198,7 @@ const cases = [
         .flipVertical()
         .fit('crop')
         .crop('center')
+        .pad(40)
         .url()
     ),
   },

@@ -25,6 +25,7 @@ export type ImageUrlBuilderOptions = Partial<SanityProjectDetails> & {
   crop?: CropMode
   saturation?: number
   auto?: AutoMode
+  pad?: number
 }
 
 export type ImageUrlBuilderOptionsWithAliases = ImageUrlBuilderOptions & {

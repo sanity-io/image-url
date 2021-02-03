@@ -137,3 +137,7 @@ Ignore any specifications from the image record (i.e. crop and hotspot).
 ### `url()`, `toString()`
 
 Return the url as a string.
+
+### `pad(value)`
+
+Specify the number of pixels to pad the image.
