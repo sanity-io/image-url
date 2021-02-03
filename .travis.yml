@@ -1,9 +1,0 @@
-language: node_js
-cache:
-  directories:
-    - ~/.npm
-node_js:
-  - "12"
-  - "10"
-script:
-  - npm run test:prod
