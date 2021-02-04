@@ -1,6 +1,6 @@
 {
   "name": "@sanity/image-url",
-  "version": "0.140.21",
+  "version": "0.140.22",
   "description": "Tools to generate image urls from Sanity content",
   "source": "src/builder.ts",
   "main": "lib/node/index.js",
