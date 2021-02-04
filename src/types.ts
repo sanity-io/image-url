@@ -65,7 +65,7 @@ export type AutoMode = 'format'
 export type Orientation = 0 | 90 | 180 | 270
 
 export interface SanityClientLike {
-  clientConfig: {dataset: string; projectId: string; apiHost?: string}
+  clientConfig: {dataset?: string; projectId?: string; apiHost?: string}
 }
 
 export type SanityImageSource =
