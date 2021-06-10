@@ -164,11 +164,14 @@ function fit(
     } else if (left + width > crop.left + crop.width) {
       left = crop.left + crop.width - width
     }
+    // Math.round rounds up on .5, since both width and left are being rounded, there might be a .5 diff which can result in image width being out of bounds
+    // See https://codesandbox.io/s/boring-sound-8khon?file=/src/App.js
+    const leftDiff = Math.round(left) - left
 
     cropRect = {
       left: Math.round(left),
       top: Math.round(top),
-      width: Math.round(width),
+      width: Math.round(width - leftDiff),
       height: Math.round(height),
     }
   } else {
@@ -188,11 +191,14 @@ function fit(
       top = crop.top + crop.height - height
     }
 
+    // See L167
+    const topDiff = Math.round(top) - top
+
     cropRect = {
       left: Math.max(0, Math.floor(left)),
       top: Math.max(0, Math.floor(top)),
       width: Math.round(width),
-      height: Math.round(height),
+      height: Math.round(height - topDiff),
     }
   }
 
