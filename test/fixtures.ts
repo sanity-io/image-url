@@ -75,7 +75,7 @@ export function croppedImage() {
   }
 }
 
-export function croppedImageRounding() {
+export function croppedLandscapeImageRounding() {
   return {
     _type: 'image',
     asset: {
@@ -93,6 +93,28 @@ export function croppedImageRounding() {
       width: 0.48536873219336263,
       x: 0.5858922039336789,
       y: 0.3640740411931818,
+    },
+  }
+}
+
+export function croppedPortraitImageRounding() {
+  return {
+    _type: 'image',
+    asset: {
+      _ref: 'image-Tb9Ew8CXIwaY6R1kjMvI0uRR-2555x3833-jpg',
+      _type: 'reference',
+    },
+    crop: {
+      bottom: 0,
+      left: 0,
+      right: 0,
+      top: 0,
+    },
+    hotspot: {
+      width: 0.7281480823863636,
+      height: 0.48536873219336263,
+      x: 0.3640740411931818,
+      y: 0.5858922039336789,
     },
   }
 }

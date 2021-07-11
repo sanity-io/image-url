@@ -1,7 +1,8 @@
 import urlForImage from '../src/urlForImage'
 import {
   croppedImage,
-  croppedImageRounding,
+  croppedLandscapeImageRounding,
+  croppedPortraitImageRounding,
   materializedAssetWithCrop,
   noHotspotImage,
   uncroppedImage,
@@ -163,16 +164,26 @@ describe('urlForHotspotImage', () => {
   test('gracefully handles rounding errors', () => {
     expect(
       urlForImage({
-        source: croppedImageRounding(),
+        source: croppedPortraitImageRounding(),
+        projectId: 'zp7mbokg',
+        dataset: 'production',
+        width: 400,
+        height: 600,
+      })
+    ).toBe(
+      'https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-2555x3833.jpg?w=400&h=600'
+    )
+
+    expect(
+      urlForImage({
+        source: croppedLandscapeImageRounding(),
         projectId: 'zp7mbokg',
         dataset: 'production',
         width: 600,
         height: 400,
       })
     ).toBe(
-      'https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-3833x2555.jpg?rect=1,0,3832,2555&w=600&h=400'
+      'https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-3833x2555.jpg?w=600&h=400'
     )
-
-    // Todo: Find a test case it happens when the crop is not wider than the aspected ratio
   })
 })

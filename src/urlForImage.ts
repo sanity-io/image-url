@@ -150,13 +150,13 @@ function fit(
 
   if (cropAspectRatio > desiredAspectRatio) {
     // The crop is wider than the desired aspect ratio. That means we are cutting from the sides
-    const height = crop.height
-    const width = height * desiredAspectRatio
-    const top = crop.top
+    const height = Math.round(crop.height)
+    const width = Math.round(height * desiredAspectRatio)
+    const top = Math.max(0, Math.round(crop.top))
 
     // Center output horizontally over hotspot
-    const hotspotXCenter = (hotspot.right - hotspot.left) / 2 + hotspot.left
-    let left = hotspotXCenter - width / 2
+    const hotspotXCenter = Math.round((hotspot.right - hotspot.left) / 2 + hotspot.left)
+    let left = Math.max(0, Math.round(hotspotXCenter - width / 2))
 
     // Keep output within crop
     if (left < crop.left) {
@@ -164,25 +164,17 @@ function fit(
     } else if (left + width > crop.left + crop.width) {
       left = crop.left + crop.width - width
     }
-    // Math.round rounds up on .5, since both width and left are being rounded, there might be a .5 diff which can result in image width being out of bounds
-    // See https://codesandbox.io/s/boring-sound-8khon?file=/src/App.js
-    const leftDiff = Math.round(left) - left
 
-    cropRect = {
-      left: Math.round(left),
-      top: Math.round(top),
-      width: Math.round(width - leftDiff),
-      height: Math.round(height),
-    }
+    cropRect = {left, top, width, height}
   } else {
     // The crop is taller than the desired ratio, we are cutting from top and bottom
     const width = crop.width
-    const height = width / desiredAspectRatio
-    const left = crop.left
+    const height = Math.round(width / desiredAspectRatio)
+    const left = Math.max(0, Math.round(crop.left))
 
     // Center output vertically over hotspot
-    const hotspotYCenter = (hotspot.bottom - hotspot.top) / 2 + hotspot.top
-    let top = hotspotYCenter - height / 2
+    const hotspotYCenter = Math.round((hotspot.bottom - hotspot.top) / 2 + hotspot.top)
+    let top = Math.max(0, Math.round(hotspotYCenter - height / 2))
 
     // Keep output rect within crop
     if (top < crop.top) {
@@ -191,15 +183,7 @@ function fit(
       top = crop.top + crop.height - height
     }
 
-    // See L167
-    const topDiff = Math.round(top) - top
-
-    cropRect = {
-      left: Math.max(0, Math.floor(left)),
-      top: Math.max(0, Math.floor(top)),
-      width: Math.round(width),
-      height: Math.round(height - topDiff),
-    }
+    cropRect = {left, top, width, height}
   }
 
   return {
