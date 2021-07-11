@@ -170,7 +170,7 @@ describe('urlForHotspotImage', () => {
         height: 400,
       })
     ).toBe(
-      'https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-3833x2555.jpg?rect=1,0,3832,2555&w=600&h=400'
+      'https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-3833x2555.jpg?w=600&h=400'
     )
 
     // Todo: Find a test case it happens when the crop is not wider than the aspected ratio
