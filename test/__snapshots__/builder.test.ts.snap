@@ -16,6 +16,8 @@ exports[`builder does crop image with no crop/hotspot specified if aspect ratio 
 
 exports[`builder does not crop image with no crop/hotspot specified 1`] = `"https://cdn.sanity.io/images/zp7mbokg/production/vK7bXJPEjVpL_C950gH1N73Zv14r7pYsbUdXl-4288x2848.jpg?w=80"`;
 
+exports[`builder dpr scaling (noop on 1) 1`] = `""`;
+
 exports[`builder dpr scaling 1`] = `"dpr=3"`;
 
 exports[`builder flip horizontal 1`] = `"flip=h"`;

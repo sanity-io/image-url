@@ -97,7 +97,8 @@ export class ImageUrlBuilder {
 
   // Set DPR scaling factor
   dpr(dpr: number) {
-    return this.withOptions({dpr})
+    // A DPR of 1 is the default - so only include it if we have a different value
+    return this.withOptions(dpr && dpr !== 1 ? {dpr} : {})
   }
 
   // Specify the width of the image in pixels

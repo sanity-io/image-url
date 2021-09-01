@@ -140,6 +140,11 @@ const cases = [
   },
 
   {
+    name: 'dpr scaling (noop on 1)',
+    url: stripPath(urlFor.image(noHotspotImage()).dpr(1).url()),
+  },
+
+  {
     name: 'sub zero top/left',
     url: stripPath(
       urlFor
@@ -170,7 +175,7 @@ const cases = [
         .flipHorizontal()
         .flipVertical()
         .fit('crop')
-	.pad(40)
+        .pad(40)
         .url()
     ),
   },
