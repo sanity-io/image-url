@@ -28,24 +28,20 @@ function urlFor(source) {
 
 Then you can use the handy builder syntax to generate your urls:
 
-```js
-<img
-  src={urlFor(author.image)
-    .width(200)
-    .url()}
-/>
+```jsx
+<img src={urlFor(author.image).width(200).url()} />
 ```
 
 This will ensure that the author image is alway 200 pixels wide, automatically applying any crop specified by the editor and cropping towards the hot-spot she drew. You can specify both width and height like this:
 
-```js
-  <img src={urlFor(movie.poster).width(500).height(300).url()}>
+```jsx
+<img src={urlFor(movie.poster).width(500).height(300).url()}>
 ```
 
-There are a huge number of useful options you can specify, like e.g. blur:
+There are a large number of useful options you can specify, like e.g. blur:
 
-```js
-  <img src={urlFor(mysteryPerson.mugshot).width(200).height(200).blur(50).url()}>
+```jsx
+<img src={urlFor(mysteryPerson.mugshot).width(200).height(200).blur(50).url()}>
 ```
 
 Note that the `url()` function needs to be the final one in order to output the url as a string.
@@ -75,10 +71,6 @@ Specify width and height in one go.
 ### `focalPoint(x, y)`
 
 Specify a center point to focus on when cropping the image. Values from 0.0 to 1.0 in fractions of the image dimensions. When specified, overrides any crop or hotspot in the image record.
-
-### `minWidth(pixels)`, `maxWidth(pixels)`, `minHeight(pixels)`, `maxHeight(pixels)`
-
-Specifies min/max dimensions when cropping
 
 ### `blur(amount)`, `sharpen(amount)`, `invert()`
 
@@ -141,3 +133,9 @@ Return the url as a string.
 ### `pad(value)`
 
 Specify the number of pixels to pad the image.
+
+### Deprecated: `minWidth(pixels)`, `maxWidth(pixels)`, `minHeight(pixels)`, `maxHeight(pixels)`
+
+Specifies min/max dimensions when cropping.
+
+**Deprecated**: You usually want to use `width`/`height` with a fit mode of `max` or `min` instead.
