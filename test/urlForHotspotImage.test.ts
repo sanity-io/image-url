@@ -1,5 +1,12 @@
 import urlForImage from '../src/urlForImage'
-import {croppedImage, materializedAssetWithCrop, noHotspotImage, uncroppedImage} from './fixtures'
+import {
+  croppedImage,
+  croppedLandscapeImageRounding,
+  croppedPortraitImageRounding,
+  materializedAssetWithCrop,
+  noHotspotImage,
+  uncroppedImage,
+} from './fixtures'
 
 describe('urlForHotspotImage', () => {
   test('does not crop when no crop is required', () => {
@@ -151,6 +158,32 @@ describe('urlForHotspotImage', () => {
       })
     ).toBe(
       'https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000.jpg?rect=200,300,1600,2400&h=100'
+    )
+  })
+
+  test('gracefully handles rounding errors', () => {
+    expect(
+      urlForImage({
+        source: croppedPortraitImageRounding(),
+        projectId: 'zp7mbokg',
+        dataset: 'production',
+        width: 400,
+        height: 600,
+      })
+    ).toBe(
+      'https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-2555x3833.jpg?w=400&h=600'
+    )
+
+    expect(
+      urlForImage({
+        source: croppedLandscapeImageRounding(),
+        projectId: 'zp7mbokg',
+        dataset: 'production',
+        width: 600,
+        height: 400,
+      })
+    ).toBe(
+      'https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-3833x2555.jpg?w=600&h=400'
     )
   })
 })
