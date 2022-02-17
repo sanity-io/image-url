@@ -139,3 +139,42 @@ Specify the number of pixels to pad the image.
 Specifies min/max dimensions when cropping.
 
 **Deprecated**: You usually want to use `width`/`height` with a fit mode of `max` or `min` instead.
+
+## Custom CDN domains
+
+You can specify a custom `baseUrl` in the builder options in order to override the default (`https://cdn.sanity.io`):
+
+```js
+import imageUrlBuilder from '@sanity/image-url'
+
+const builder = imageUrlBuilder({
+  baseUrl: 'https://my.custom.domain',
+  projectId: 'abc123',
+  dataset: 'production',
+})
+const urlFor = (source) => builder.image(source)
+
+urlFor('image-928ac96d53b0c9049836c86ff25fd3c009039a16-200x200-png')
+  .auto('format')
+  .fit('max')
+  .width(720)
+  .toString()
+
+// output: https://my.custom.domain/images/abc123/production/928ac96d53b0c9049836c86ff25fd3c009039a16-200x200.png?auto=format&fit=max&w=720
+```
+
+If you already have a configured client instance:
+
+```js
+import imageUrlBuilder from '@sanity/image-url'
+import myConfiguredClient from './mySanityClient'
+
+const builder = imageUrlBuilder({
+  ...myConfiguredClient.config(),
+  baseUrl: 'https://my.custom.domain',
+})
+```
+
+## License
+
+MIT © [Sanity.io](https://www.sanity.io/)
