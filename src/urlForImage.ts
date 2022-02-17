@@ -79,7 +79,7 @@ export default function urlForImage(options: ImageUrlBuilderOptions): string {
 
 // eslint-disable-next-line complexity
 function specToImageUrl(spec: ImageUrlBuilderOptionsWithAsset) {
-  const cdnUrl = spec.baseUrl || 'https://cdn.sanity.io'
+  const cdnUrl = (spec.baseUrl || 'https://cdn.sanity.io').replace(/\/+$/, '')
   const filename = `${spec.asset.id}-${spec.asset.width}x${spec.asset.height}.${spec.asset.format}`
   const baseUrl = `${cdnUrl}/images/${spec.projectId}/${spec.dataset}/${filename}`
 
