@@ -68,6 +68,10 @@ export interface SanityClientLike {
   clientConfig: {dataset?: string; projectId?: string; apiHost?: string}
 }
 
+export type SanityModernClientLike = {
+  config(): {dataset?: string; projectId?: string; apiHost?: string}
+}
+
 export type SanityImageSource =
   | string // Image asset ID
   | SanityReference
