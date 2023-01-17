@@ -5,6 +5,7 @@ import {
   ImageFormat,
   ImageUrlBuilderOptions,
   ImageUrlBuilderOptionsWithAliases,
+  SanityModernClientLike,
   Orientation,
   SanityClientLike,
   SanityImageSource,
@@ -16,8 +17,16 @@ const validFits = ['clip', 'crop', 'fill', 'fillmax', 'max', 'scale', 'min']
 const validCrops = ['top', 'bottom', 'left', 'right', 'center', 'focalpoint', 'entropy']
 const validAutoModes = ['format']
 
-function isSanityClientLike(client?: SanityClientLike): client is SanityClientLike {
-  return client ? typeof client.clientConfig === 'object' : false
+function isSanityModernClientLike(
+  client?: SanityClientLike | SanityProjectDetails | SanityModernClientLike
+): client is SanityModernClientLike {
+  return client && 'config' in client ? typeof client.config === 'function' : false
+}
+
+function isSanityClientLike(
+  client?: SanityClientLike | SanityProjectDetails | SanityModernClientLike
+): client is SanityClientLike {
+  return client && 'clientConfig' in client ? typeof client.clientConfig === 'object' : false
 }
 
 function rewriteSpecName(key: string) {
@@ -32,7 +41,21 @@ function rewriteSpecName(key: string) {
   return key
 }
 
-export default function urlBuilder(options?: SanityClientLike | SanityProjectDetails) {
+export default function urlBuilder(
+  options?: SanityClientLike | SanityProjectDetails | SanityModernClientLike
+) {
+  // Did we get a modernish client?
+  if (isSanityModernClientLike(options)) {
+    // Inherit config from client
+    const {apiHost: apiUrl, projectId, dataset} = options.config()
+    const apiHost = apiUrl || 'https://api.sanity.io'
+    return new ImageUrlBuilder(null, {
+      baseUrl: apiHost.replace(/^https:\/\/api\./, 'https://cdn.'),
+      projectId,
+      dataset,
+    })
+  }
+
   // Did we get a SanityClient?
   const client = options as SanityClientLike
   if (isSanityClientLike(client)) {
