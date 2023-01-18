@@ -74,4 +74,45 @@ describe('parseSource', () => {
   test('returns null on non-image object', () => {
     expect(parseSource({})).toEqual(null)
   })
+
+  test('image with materialized asset, read-only', () => {
+    const noCrop = Object.defineProperties(
+      {_type: 'image'},
+      {
+        crop: {
+          writable: false,
+          value: {bottom: 0, top: 1, left: 2, right: 3},
+        },
+        hotspot: {
+          writable: false,
+          value: {height: 0.99, width: 0.98, x: 0.51, y: 0.49},
+        },
+        asset: {
+          writable: false,
+          value: Object.freeze({
+            _id: 'image-Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000-jpg',
+            _type: 'sanity.imageAsset',
+          }),
+        },
+      }
+    )
+
+    expect(parseSource(noCrop)).toMatchInlineSnapshot(`
+      Object {
+        "_type": "image",
+        "crop": Object {
+          "bottom": 0,
+          "left": 2,
+          "right": 3,
+          "top": 1,
+        },
+        "hotspot": Object {
+          "height": 0.99,
+          "width": 0.98,
+          "x": 0.51,
+          "y": 0.49,
+        },
+      }
+    `)
+  })
 })

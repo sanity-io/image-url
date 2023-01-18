@@ -61,7 +61,7 @@ export default function parseSource(source?: SanityImageSource) {
     }
   } else if (typeof source.asset === 'object') {
     // Probably an actual image with materialized asset
-    image = source
+    image = {...source}
   } else {
     // We got something that does not look like an image, or it is an image
     // that currently isn't sporting an asset.
