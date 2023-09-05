@@ -108,11 +108,11 @@ Flips the image.
 
 ### `crop(mode)`
 
-Specifies how to crop the image. When specified, overrides any crop or hotspot in the image record. See the [documentation](https://www.sanity.io/docs/reference/image-urls#crop-object-object) for details.
+Specifies how to crop the image. When specified, overrides any crop or hotspot in the image record. See the [documentation](https://www.sanity.io/docs/image-urls#crop-749d37d946b6) for details.
 
 ### `fit(value)`
 
-Configures the fit mode. See the [documentation](https://www.sanity.io/docs/reference/image-urls#fit-object-object) for details.
+Configures the fit mode. See the [documentation](https://www.sanity.io/docs/image-urls#fit-45b29dc6f09f) for details.
 
 ### `dpr(value)`
 
