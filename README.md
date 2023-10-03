@@ -142,6 +142,8 @@ Specifies min/max dimensions when cropping.
 
 ## Custom CDN domains
 
+> ℹ️ This feature is available to select Enterprise accounts. Get in touch with your sales executive to learn more.
+
 You can specify a custom `baseUrl` in the builder options in order to override the default (`https://cdn.sanity.io`):
 
 ```js
