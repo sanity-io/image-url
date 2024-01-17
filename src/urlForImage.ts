@@ -34,7 +34,7 @@ export const SPEC_NAME_TO_URL_NAME_MAPPINGS = [
 ]
 
 export default function urlForImage(options: ImageUrlBuilderOptions): string {
-  let spec = {...(options || {})}
+  let spec = { ...(options || {}) }
   const source = spec.source
   delete spec.source
 
@@ -71,23 +71,24 @@ export default function urlForImage(options: ImageUrlBuilderOptions): string {
   // If irrelevant, or if we are requested to: don't perform crop/fit based on
   // the crop/hotspot.
   if (!(spec.rect || spec.focalPoint || spec.ignoreImageParams || spec.crop)) {
-    spec = {...spec, ...fit({crop, hotspot}, spec)}
+    spec = { ...spec, ...fit({ crop, hotspot }, spec) }
   }
 
-  return specToImageUrl({...spec, asset})
+  return specToImageUrl({ ...spec, asset })
 }
 
 // eslint-disable-next-line complexity
 function specToImageUrl(spec: ImageUrlBuilderOptionsWithAsset) {
   const cdnUrl = (spec.baseUrl || 'https://cdn.sanity.io').replace(/\/+$/, '')
   const filename = `${spec.asset.id}-${spec.asset.width}x${spec.asset.height}.${spec.asset.format}`
-  const baseUrl = `${cdnUrl}/images/${spec.projectId}/${spec.dataset}/${filename}`
+  const dataset = process.env.SANITY_STUDIO_IMAGE_DATASET_OVERRIDE ?? spec.dataset
+  const baseUrl = `${cdnUrl}/images/${spec.projectId}/${dataset}/${filename}`
 
   const params = []
 
   if (spec.rect) {
     // Only bother url with a crop if it actually crops anything
-    const {left, top, width, height} = spec.rect
+    const { left, top, width, height } = spec.rect
     const isEffectiveCrop =
       left !== 0 || top !== 0 || height !== spec.asset.height || width !== spec.asset.width
 
@@ -128,7 +129,7 @@ function specToImageUrl(spec: ImageUrlBuilderOptionsWithAsset) {
 }
 
 function fit(
-  source: {crop: CropSpec; hotspot: HotspotSpec},
+  source: { crop: CropSpec; hotspot: HotspotSpec },
   spec: ImageUrlBuilderOptions
 ): SanityImageFitResult {
   let cropRect: SanityImageRect
@@ -138,7 +139,7 @@ function fit(
 
   // If we are not constraining the aspect ratio, we'll just use the whole crop
   if (!(imgWidth && imgHeight)) {
-    return {width: imgWidth, height: imgHeight, rect: source.crop}
+    return { width: imgWidth, height: imgHeight, rect: source.crop }
   }
 
   const crop = source.crop
@@ -165,7 +166,7 @@ function fit(
       left = crop.left + crop.width - width
     }
 
-    cropRect = {left, top, width, height}
+    cropRect = { left, top, width, height }
   } else {
     // The crop is taller than the desired ratio, we are cutting from top and bottom
     const width = crop.width
@@ -183,7 +184,7 @@ function fit(
       top = crop.top + crop.height - height
     }
 
-    cropRect = {left, top, width, height}
+    cropRect = { left, top, width, height }
   }
 
   return {
@@ -194,4 +195,4 @@ function fit(
 }
 
 // For backwards-compatibility
-export {parseSource}
+export { parseSource }
