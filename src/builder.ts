@@ -247,6 +247,10 @@ export class ImageUrlBuilder {
     return this.withOptions({pad})
   }
 
+  vanityName(value: string) {
+    return this.withOptions({vanityName: value})
+  }
+
   // Gets the url based on the submitted parameters
   url() {
     return urlForImage(this.options)
