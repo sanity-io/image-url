@@ -247,6 +247,7 @@ export class ImageUrlBuilder {
     return this.withOptions({pad})
   }
 
+  // Vanity URL for more SEO friendly URLs
   vanityName(value: string) {
     return this.withOptions({vanityName: value})
   }
