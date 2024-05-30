@@ -134,6 +134,10 @@ Return the url as a string.
 
 Specify the number of pixels to pad the image.
 
+### `vanityName(value)`
+ 
+Specify a vanity name for the image. This is useful for SEO purposes.
+
 ### Deprecated: `minWidth(pixels)`, `maxWidth(pixels)`, `minHeight(pixels)`, `maxHeight(pixels)`
 
 Specifies min/max dimensions when cropping.
