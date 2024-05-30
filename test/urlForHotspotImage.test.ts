@@ -193,31 +193,4 @@ describe('urlForImage', () => {
       'https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-3833x2555.jpg?w=600&h=400'
     )
   })
-
-  test('adds vanity name to url when specified, with params', () => {
-    expect(
-      urlForImage({
-        source: noHotspotImage(),
-        projectId: 'zp7mbokg',
-        dataset: 'production',
-        height: 100,
-        vanityName: 'my-image',
-      })
-    ).toBe(
-      'https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000.jpg/my-image?h=100'
-    )
-  })
-
-  test('adds vanity name to url when specified, without params', () => {
-    expect(
-      urlForImage({
-        source: noHotspotImage(),
-        projectId: 'zp7mbokg',
-        dataset: 'production',
-        vanityName: 'my-image',
-      })
-    ).toBe(
-      'https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000.jpg/my-image'
-    )
-  })
 })

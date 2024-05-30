@@ -145,6 +145,11 @@ const cases = [
   },
 
   {
+    name: 'vanity name',
+    url: urlFor.image(noHotspotImage()).vanityName('moo').url()
+  },
+
+  {
     name: 'sub zero top/left',
     url: stripPath(
       urlFor
@@ -175,7 +180,7 @@ const cases = [
         .flipHorizontal()
         .flipVertical()
         .fit('crop')
-        .pad(40)
+        .pad(40)  
         .url()
     ),
   },
@@ -203,7 +208,7 @@ const cases = [
         .flipVertical()
         .fit('crop')
         .crop('center')
-        .pad(40)
+        .pad(40) 
         .url()
     ),
   },
@@ -211,7 +216,7 @@ const cases = [
 
 describe('builder', () => {
   cases.forEach((testCase) => {
-    test(testCase.name, () => {
+    test(testCase.name, () => { 
       expect(testCase.url).toMatchSnapshot()
     })
   })
