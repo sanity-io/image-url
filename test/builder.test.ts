@@ -130,6 +130,11 @@ const cases = [
   },
 
   {
+    name: 'frame = 1',
+    url: stripPath(urlFor.image(noHotspotImage()).frame(1).url()),
+  },
+
+  {
     name: 'automatic format',
     url: stripPath(urlFor.image(noHotspotImage()).auto('format').url()),
   },
@@ -176,6 +181,7 @@ const cases = [
         .flipVertical()
         .fit('crop')
         .pad(40)
+        .frame(1)
         .url()
     ),
   },
@@ -204,6 +210,7 @@ const cases = [
         .fit('crop')
         .crop('center')
         .pad(40)
+        .frame(1)
         .url()
     ),
   },
@@ -229,5 +236,10 @@ describe('builder', () => {
   test('should throw on invalid auto mode', () => {
     // @ts-ignore: Because we're throwing on invalids
     expect(() => urlFor.image(croppedImage()).auto('moo')).toThrowError(/Invalid auto mode "moo"/)
+  })
+
+  test('should throw on invalid frame number', () => {
+    // @ts-ignore: Because we're throwing on invalids
+    expect(() => urlFor.image(croppedImage()).frame(2)).toThrowError(/Invalid frame value "2"/)
   })
 })

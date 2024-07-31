@@ -26,6 +26,7 @@ export type ImageUrlBuilderOptions = Partial<SanityProjectDetails> & {
   saturation?: number
   auto?: AutoMode
   pad?: number
+  frame?: number
 }
 
 export type ImageUrlBuilderOptionsWithAliases = ImageUrlBuilderOptions & {
