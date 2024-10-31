@@ -134,6 +134,15 @@ Return the url as a string.
 
 Specify the number of pixels to pad the image.
 
+### `vanityName(fileName)`
+ 
+Specify a "vanity name" for the image. This is useful for SEO purposes and is added to the end of the URL. For example:
+
+```ts
+urlFor('image-928ac96d53b0c9049836c86ff25fd3c009039a16-200x200-png').vanityName('myImage.png')
+// https://cdn.sanity.io/…/928ac96d53b0c9049836c86ff25fd3c009039a16-200x200.png/myImage.png
+```
+
 ### `frame(value)`
 
 Specify the frame of an animated image to transform.  Acceptable values:

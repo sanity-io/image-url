@@ -247,6 +247,11 @@ export class ImageUrlBuilder {
     return this.withOptions({pad})
   }
 
+  // Vanity URL for more SEO friendly URLs
+  vanityName(value: string) {
+    return this.withOptions({vanityName: value})
+  }
+
   frame(frame: number) {
     if (frame !== 1) {
       throw new Error(`Invalid frame value "${frame}"`)

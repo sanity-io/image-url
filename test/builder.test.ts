@@ -150,6 +150,11 @@ const cases = [
   },
 
   {
+    name: 'vanity name',
+    url: urlFor.image(noHotspotImage()).vanityName('moo').url()
+  },
+
+  {
     name: 'sub zero top/left',
     url: stripPath(
       urlFor
@@ -218,7 +223,7 @@ const cases = [
 
 describe('builder', () => {
   cases.forEach((testCase) => {
-    test(testCase.name, () => {
+    test(testCase.name, () => { 
       expect(testCase.url).toMatchSnapshot()
     })
   })
