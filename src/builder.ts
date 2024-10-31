@@ -252,6 +252,14 @@ export class ImageUrlBuilder {
     return this.withOptions({vanityName: value})
   }
 
+  frame(frame: number) {
+    if (frame !== 1) {
+      throw new Error(`Invalid frame value "${frame}"`)
+    }
+
+    return this.withOptions({frame})
+  }
+
   // Gets the url based on the submitted parameters
   url() {
     return urlForImage(this.options)
