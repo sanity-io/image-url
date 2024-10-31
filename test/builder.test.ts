@@ -151,6 +151,16 @@ const cases = [
   },
 
   {
+    name: 'can set format',
+    url: stripPath(urlFor.image(noHotspotImage()).format('jpg').url()),
+  },
+
+  {
+    name: 'can reset format',
+    url: stripPath(urlFor.image(noHotspotImage()).format('jpg').format(undefined).url()),
+  },
+
+  {
     name: 'vanity name',
     url: urlFor.image(noHotspotImage()).vanityName('moo').url(),
   },

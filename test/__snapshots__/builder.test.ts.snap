@@ -8,6 +8,10 @@ exports[`builder automatic format 1`] = `"auto=format"`;
 
 exports[`builder can be told to ignore hotspot 1`] = `"https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000.jpg?w=100&h=80"`;
 
+exports[`builder can reset format 1`] = `""`;
+
+exports[`builder can set format 1`] = `"fm=jpg"`;
+
 exports[`builder can specify options with url params 1`] = `"https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000.jpg?rect=200,300,1600,1200&w=320&h=240"`;
 
 exports[`builder constrains aspect ratio 1`] = `"https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000.jpg?rect=200,300,1600,1280&w=100&h=80"`;
