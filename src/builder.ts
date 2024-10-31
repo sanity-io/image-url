@@ -1,4 +1,4 @@
-import {
+import type {
   AutoMode,
   CropMode,
   FitMode,
@@ -9,6 +9,7 @@ import {
   Orientation,
   SanityClientLike,
   SanityImageSource,
+  SanityProjectDetails,
 } from './types'
 import urlForImage, {SPEC_NAME_TO_URL_NAME_MAPPINGS} from './urlForImage'
 
@@ -17,13 +18,13 @@ const validCrops = ['top', 'bottom', 'left', 'right', 'center', 'focalpoint', 'e
 const validAutoModes = ['format']
 
 function isSanityModernClientLike(
-  client?: SanityClientLike | ImageUrlBuilderOptions | SanityModernClientLike
+  client?: SanityClientLike | SanityProjectDetails | SanityModernClientLike
 ): client is SanityModernClientLike {
   return client && 'config' in client ? typeof client.config === 'function' : false
 }
 
 function isSanityClientLike(
-  client?: SanityClientLike | ImageUrlBuilderOptions | SanityModernClientLike
+  client?: SanityClientLike | SanityProjectDetails | SanityModernClientLike
 ): client is SanityClientLike {
   return client && 'clientConfig' in client ? typeof client.clientConfig === 'object' : false
 }
@@ -41,7 +42,7 @@ function rewriteSpecName(key: string) {
 }
 
 export default function urlBuilder(
-  options?: SanityClientLike | ImageUrlBuilderOptions | SanityModernClientLike
+  options?: SanityClientLike | SanityProjectDetails | SanityModernClientLike
 ) {
   // Did we get a modernish client?
   if (isSanityModernClientLike(options)) {

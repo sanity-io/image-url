@@ -82,6 +82,7 @@ export type SanityImageSource =
   | SanityImageWithAssetStub
 
 export interface SanityProjectDetails {
+  baseUrl?: string
   projectId: string
   dataset: string
 }

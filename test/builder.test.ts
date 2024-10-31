@@ -1,3 +1,4 @@
+import {createClient} from '@sanity/client'
 import sanityImage from '../src/builder'
 import {croppedImage, imageWithNoCropSpecified, noHotspotImage} from './fixtures'
 
@@ -151,7 +152,7 @@ const cases = [
 
   {
     name: 'vanity name',
-    url: urlFor.image(noHotspotImage()).vanityName('moo').url()
+    url: urlFor.image(noHotspotImage()).vanityName('moo').url(),
   },
 
   {
@@ -223,7 +224,7 @@ const cases = [
 
 describe('builder', () => {
   cases.forEach((testCase) => {
-    test(testCase.name, () => { 
+    test(testCase.name, () => {
       expect(testCase.url).toMatchSnapshot()
     })
   })
@@ -246,5 +247,53 @@ describe('builder', () => {
   test('should throw on invalid frame number', () => {
     // @ts-ignore: Because we're throwing on invalids
     expect(() => urlFor.image(croppedImage()).frame(2)).toThrowError(/Invalid frame value "2"/)
+  })
+
+  test('should allow specifying baseUrl directly', () => {
+    expect(
+      sanityImage({
+        baseUrl: 'https://cdn.mydomain.com',
+        projectId: 'aardvark',
+        dataset: 'animals',
+      })
+        .image('image-928ac96d53b0c9049836c86ff25fd3c009039a16-200x200-png')
+        .toString()
+    ).toBe(
+      'https://cdn.mydomain.com/images/aardvark/animals/928ac96d53b0c9049836c86ff25fd3c009039a16-200x200.png'
+    )
+  })
+
+  test('should allow getting baseUrl through legacy client', () => {
+    const client = {
+      clientConfig: {
+        projectId: 'aardvark',
+        dataset: 'animals',
+        apiHost: 'https://api.mydomain.com',
+      },
+    }
+    expect(
+      sanityImage(client)
+        .image('image-928ac96d53b0c9049836c86ff25fd3c009039a16-200x200-png')
+        .toString()
+    ).toBe(
+      'https://cdn.mydomain.com/images/aardvark/animals/928ac96d53b0c9049836c86ff25fd3c009039a16-200x200.png'
+    )
+  })
+
+  test('should allow getting baseUrl through client', () => {
+    const client = createClient({
+      projectId: 'aardvark',
+      dataset: 'animals',
+      apiVersion: '2021-03-25',
+      apiHost: 'https://api.mydomain.com',
+      useCdn: false,
+    })
+    expect(
+      sanityImage(client)
+        .image('image-928ac96d53b0c9049836c86ff25fd3c009039a16-200x200-png')
+        .toString()
+    ).toBe(
+      'https://cdn.mydomain.com/images/aardvark/animals/928ac96d53b0c9049836c86ff25fd3c009039a16-200x200.png'
+    )
   })
 })
