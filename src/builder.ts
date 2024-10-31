@@ -9,7 +9,6 @@ import {
   Orientation,
   SanityClientLike,
   SanityImageSource,
-  SanityProjectDetails,
 } from './types'
 import urlForImage, {SPEC_NAME_TO_URL_NAME_MAPPINGS} from './urlForImage'
 
@@ -18,13 +17,13 @@ const validCrops = ['top', 'bottom', 'left', 'right', 'center', 'focalpoint', 'e
 const validAutoModes = ['format']
 
 function isSanityModernClientLike(
-  client?: SanityClientLike | SanityProjectDetails | SanityModernClientLike
+  client?: SanityClientLike | ImageUrlBuilderOptions | SanityModernClientLike
 ): client is SanityModernClientLike {
   return client && 'config' in client ? typeof client.config === 'function' : false
 }
 
 function isSanityClientLike(
-  client?: SanityClientLike | SanityProjectDetails | SanityModernClientLike
+  client?: SanityClientLike | ImageUrlBuilderOptions | SanityModernClientLike
 ): client is SanityClientLike {
   return client && 'clientConfig' in client ? typeof client.clientConfig === 'object' : false
 }
@@ -42,7 +41,7 @@ function rewriteSpecName(key: string) {
 }
 
 export default function urlBuilder(
-  options?: SanityClientLike | SanityProjectDetails | SanityModernClientLike
+  options?: SanityClientLike | ImageUrlBuilderOptions | SanityModernClientLike
 ) {
   // Did we get a modernish client?
   if (isSanityModernClientLike(options)) {
@@ -57,10 +56,9 @@ export default function urlBuilder(
   }
 
   // Did we get a SanityClient?
-  const client = options as SanityClientLike
-  if (isSanityClientLike(client)) {
+  if (isSanityClientLike(options)) {
     // Inherit config from client
-    const {apiHost: apiUrl, projectId, dataset} = client.clientConfig
+    const {apiHost: apiUrl, projectId, dataset} = options.clientConfig
     const apiHost = apiUrl || 'https://api.sanity.io'
     return new ImageUrlBuilder(null, {
       baseUrl: apiHost.replace(/^https:\/\/api\./, 'https://cdn.'),
@@ -70,7 +68,7 @@ export default function urlBuilder(
   }
 
   // Or just accept the options as given
-  return new ImageUrlBuilder(null, options as ImageUrlBuilderOptions)
+  return new ImageUrlBuilder(null, options || {})
 }
 
 export class ImageUrlBuilder {
