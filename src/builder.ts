@@ -174,7 +174,7 @@ export class ImageUrlBuilder {
   }
 
   // Specify the image format of the image. 'jpg', 'pjpg', 'png', 'webp'
-  format(format: ImageFormat) {
+  format(format?: ImageFormat) {
     return this.withOptions({format})
   }
 
