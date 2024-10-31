@@ -11,7 +11,8 @@
     "declarationDir": "lib/types",
     "outDir": "lib/node/",
     "pretty": true,
-    "typeRoots": ["node_modules/@types"]
+    "typeRoots": ["node_modules/@types"],
+    "skipLibCheck": true
   },
   "include": ["src"]
 }
