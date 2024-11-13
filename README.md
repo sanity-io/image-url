@@ -88,7 +88,7 @@ Specify the image format of the image. 'jpg', 'pjpg', 'png', 'webp'
 
 Specify transformations to automatically apply based on browser capabilities. Supported values:
 
-- `format` - Automatically uses WebP if supported
+- `format` - Automatically uses WebP and AVIF if supported
 
 ### `orientation(angle)`
 
