@@ -6,6 +6,7 @@ import {
   materializedAssetWithCrop,
   noHotspotImage,
   uncroppedImage,
+  inProgressUpload,
 } from './fixtures'
 
 describe('urlForImage', () => {
@@ -14,6 +15,27 @@ describe('urlForImage', () => {
     expect(() => urlForImage({source: {}}).toString()).toThrowError(
       'Unable to resolve image URL from source ({})'
     )
+  })
+
+  test('handles in-progress uploads gracefully without throwing', () => {
+    // Should not throw an error for in-progress uploads
+    expect(() => 
+      urlForImage({
+        source: inProgressUpload(),
+        projectId: 'zp7mbokg',
+        dataset: 'production'
+      })
+    ).not.toThrow()
+    
+    // Should return a valid URL (even if it's a placeholder)
+    const url = urlForImage({
+      source: inProgressUpload(),
+      projectId: 'zp7mbokg',
+      dataset: 'production'
+    })
+    expect(url).toContain('cdn.sanity.io')
+    expect(url).toContain('zp7mbokg')
+    expect(url).toContain('production')
   })
 
   test('does not crop when no crop is required', () => {
