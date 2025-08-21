@@ -123,7 +123,7 @@ describe('parseSource', () => {
     expect(parsedSource).not.toBeNull()
     expect(parsedSource).toMatchObject({
       asset: {
-        _ref: 'image-placeholder-1x1-png',
+        _ref: 'image-placeholder-0x0-png',
       },
       crop: {
         left: 0,
@@ -132,10 +132,10 @@ describe('parseSource', () => {
         right: 0,
       },
       hotspot: {
-        x: 0.5,
-        y: 0.5,
-        height: 1.0,
-        width: 1.0,
+        x: 0,
+        y: 0,
+        height: 0,
+        width: 0,
       },
     })
   })

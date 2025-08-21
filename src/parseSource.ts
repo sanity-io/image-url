@@ -44,7 +44,8 @@ export default function parseSource(source?: SanityImageSource) {
     // This allows the UI to continue rendering while the upload completes
     return {
       asset: {
-        _ref: 'image-placeholder-1x1-png', // Placeholder asset reference
+        // Placeholder asset reference that follows Sanity's asset reference format
+        _ref: 'image-placeholder-0x0-png',
       },
       crop: {
         left: 0,
@@ -53,10 +54,10 @@ export default function parseSource(source?: SanityImageSource) {
         right: 0,
       },
       hotspot: {
-        x: 0.5,
-        y: 0.5,
-        height: 1.0,
-        width: 1.0,
+        x: 0,
+        y: 0,
+        height: 0,
+        width: 0,
       },
     }
   }
