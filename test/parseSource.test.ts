@@ -7,6 +7,7 @@ import {
   imageWithNoCropSpecified,
   materializedAssetWithCrop,
   noHotspotImage,
+  inProgressUpload,
 } from './fixtures'
 
 function compareParsedSource(
@@ -114,5 +115,28 @@ describe('parseSource', () => {
         },
       }
     `)
+  })
+
+  test('handles in-progress uploads gracefully', () => {
+    const parsedSource = parseSource(inProgressUpload())
+    // Should return a default image object instead of null
+    expect(parsedSource).not.toBeNull()
+    expect(parsedSource).toMatchObject({
+      asset: {
+        _ref: 'image-placeholder-0x0-png',
+      },
+      crop: {
+        left: 0,
+        top: 0,
+        bottom: 0,
+        right: 0,
+      },
+      hotspot: {
+        x: 0,
+        y: 0,
+        height: 0,
+        width: 0,
+      },
+    })
   })
 })

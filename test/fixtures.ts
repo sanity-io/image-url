@@ -157,3 +157,15 @@ export function assetDocument() {
     url: 'https://cdn.sanity.io/images/ppsg7ml5/test/Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000.jpg',
   }
 }
+
+export function inProgressUpload() {
+  return {
+    _type: 'image',
+    _upload: {
+      _type: 'sanity.fileAsset',
+      assetId: 'upload-123',
+      // No asset reference yet - upload is in progress
+    },
+    // Missing asset reference
+  }
+}
