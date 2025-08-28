@@ -22,7 +22,7 @@ const isAssetStub = (src: SanityImageSource): src is SanityImageWithAssetStub =>
 }
 
 // Detect in-progress uploads (has upload key but no complete asset reference)
-const isInProgressUpload = (src: SanityImageSource): boolean => {
+export const isInProgressUpload = (src: SanityImageSource): boolean => {
   if (typeof src === 'object' && src !== null) {
     const obj = src as any
     // Check if it has an upload key (indicating in-progress upload)
@@ -36,30 +36,6 @@ const isInProgressUpload = (src: SanityImageSource): boolean => {
 export default function parseSource(source?: SanityImageSource) {
   if (!source) {
     return null
-  }
-
-  // Handle in-progress uploads by returning a default image object
-  if (isInProgressUpload(source)) {
-    // Return a default image object that won't crash the render cycle
-    // This allows the UI to continue rendering while the upload completes
-    return {
-      asset: {
-        // Placeholder asset reference that follows Sanity's asset reference format
-        _ref: 'image-placeholder-0x0-png',
-      },
-      crop: {
-        left: 0,
-        top: 0,
-        bottom: 0,
-        right: 0,
-      },
-      hotspot: {
-        x: 0,
-        y: 0,
-        height: 0,
-        width: 0,
-      },
-    }
   }
 
   let image: SanityImageObject

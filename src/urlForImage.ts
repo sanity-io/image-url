@@ -1,5 +1,5 @@
 import parseAssetId from './parseAssetId'
-import parseSource from './parseSource'
+import parseSource, {isInProgressUpload} from './parseSource'
 import {
   CropSpec,
   HotspotSpec,
@@ -41,6 +41,11 @@ export default function urlForImage(options: ImageUrlBuilderOptions): string {
 
   const image = parseSource(source)
   if (!image) {
+    if (source && isInProgressUpload(source)) {
+      // This is a placeholder image that will be replaced with the actual image when the upload is complete
+      // This is a 0x0 transparent PNG image
+      return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8HwQACfsD/QNViZkAAAAASUVORK5CYII='
+    }
     throw new Error(`Unable to resolve image URL from source (${JSON.stringify(source)})`)
   }
 
