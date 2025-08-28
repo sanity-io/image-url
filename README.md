@@ -192,6 +192,18 @@ const builder = imageUrlBuilder({
 })
 ```
 
+## How to publish
+
+1. On your development PR (or after), you can run a command `pnpm changeset add`
+
+This will add a .md file in the .changeset which is necessary for the automated release PR to know that it should go out in the next release
+
+2. Go to the PRs and you should find an open PR with Version Packages for the title (such as https://github.com/sanity-io/image-url/pull/79)
+
+3. Confirm that everything you want to be released is in the description. If it isn't double check that the .mds are in the main branch.
+
+4. Approve and let the automated action finish.
+
 ## License
 
 MIT © [Sanity.io](https://www.sanity.io/)
