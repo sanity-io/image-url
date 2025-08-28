@@ -31,7 +31,7 @@ export const SPEC_NAME_TO_URL_NAME_MAPPINGS = [
   ['auto', 'auto'],
   ['dpr', 'dpr'],
   ['pad', 'pad'],
-  ['frame', 'frame']
+  ['frame', 'frame'],
 ]
 
 export default function urlForImage(options: ImageUrlBuilderOptions): string {
@@ -81,9 +81,9 @@ export default function urlForImage(options: ImageUrlBuilderOptions): string {
 // eslint-disable-next-line complexity
 function specToImageUrl(spec: ImageUrlBuilderOptionsWithAsset) {
   const cdnUrl = (spec.baseUrl || 'https://cdn.sanity.io').replace(/\/+$/, '')
-  const vanityStub = spec.vanityName ? `/${spec.vanityName}` : '' 
+  const vanityStub = spec.vanityName ? `/${spec.vanityName}` : ''
   const filename = `${spec.asset.id}-${spec.asset.width}x${spec.asset.height}.${spec.asset.format}${vanityStub}`
-  const baseUrl = `${cdnUrl}/images/${spec.projectId}/${spec.dataset}/${filename}` 
+  const baseUrl = `${cdnUrl}/images/${spec.projectId}/${spec.dataset}/${filename}`
 
   const params = []
 

@@ -19,19 +19,19 @@ describe('urlForImage', () => {
 
   test('handles in-progress uploads gracefully without throwing', () => {
     // Should not throw an error for in-progress uploads
-    expect(() => 
+    expect(() =>
       urlForImage({
         source: inProgressUpload(),
         projectId: 'zp7mbokg',
-        dataset: 'production'
+        dataset: 'production',
       })
     ).not.toThrow()
-    
+
     // Should return a valid URL (even if it's a placeholder)
     const url = urlForImage({
       source: inProgressUpload(),
       projectId: 'zp7mbokg',
-      dataset: 'production'
+      dataset: 'production',
     })
     expect(url).toContain('cdn.sanity.io')
     expect(url).toContain('zp7mbokg')
