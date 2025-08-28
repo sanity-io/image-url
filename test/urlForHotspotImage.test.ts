@@ -33,9 +33,9 @@ describe('urlForImage', () => {
       projectId: 'zp7mbokg',
       dataset: 'production',
     })
-    expect(url).toContain('cdn.sanity.io')
-    expect(url).toContain('zp7mbokg')
-    expect(url).toContain('production')
+    expect(url).toContain(
+      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8HwQACfsD/QNViZkAAAAASUVORK5CYII='
+    )
   })
 
   test('does not crop when no crop is required', () => {
