@@ -10,6 +10,12 @@
       "require": "./lib/index.cjs",
       "default": "./lib/index.js"
     },
+    "./signed": {
+      "source": "./src/signed/index.ts",
+      "import": "./lib/signed/index.js",
+      "require": "./lib/signed/index.cjs",
+      "default": "./lib/signed/index.js"
+    },
     "./lib/types/*": {
       "import": "./lib/compat/empty.js",
       "require": "./lib/compat/empty.cjs",
@@ -91,5 +97,9 @@
     "content",
     "image-url"
   ],
+  "dependencies": {
+    "@noble/ed25519": "^3.0.0",
+    "@noble/hashes": "^2.0.0"
+  },
   "packageManager": "pnpm@10.15.0"
 }

@@ -29,7 +29,10 @@ function isSanityClientLike(
   return client && 'clientConfig' in client ? typeof client.clientConfig === 'object' : false
 }
 
-function rewriteSpecName(key: string) {
+/**
+ * @internal
+ */
+export function rewriteSpecName(key: string) {
   const specs = SPEC_NAME_TO_URL_NAME_MAPPINGS
   for (const entry of specs) {
     const [specName, param] = entry
@@ -44,35 +47,50 @@ function rewriteSpecName(key: string) {
 /**
  * @public
  */
-export default function urlBuilder(
-  options?: SanityClientLike | SanityProjectDetails | SanityModernClientLike
-) {
-  // Did we get a modernish client?
-  if (isSanityModernClientLike(options)) {
+export function createBuilder<C extends typeof ImageUrlBuilder>(
+  Builder: C,
+  _options?: SanityClientLike | SanityProjectDetails | SanityModernClientLike
+): InstanceType<C> {
+  let options: ConstructorParameters<C>[1] = {}
+
+  if (isSanityModernClientLike(_options)) {
     // Inherit config from client
-    const {apiHost: apiUrl, projectId, dataset} = options.config()
+    const {apiHost: apiUrl, projectId, dataset} = _options.config()
     const apiHost = apiUrl || 'https://api.sanity.io'
-    return new ImageUrlBuilder(null, {
+    options = {
       baseUrl: apiHost.replace(/^https:\/\/api\./, 'https://cdn.'),
       projectId,
       dataset,
-    })
+    }
   }
 
   // Did we get a SanityClient?
-  if (isSanityClientLike(options)) {
+  else if (isSanityClientLike(_options)) {
     // Inherit config from client
-    const {apiHost: apiUrl, projectId, dataset} = options.clientConfig
+    const {apiHost: apiUrl, projectId, dataset} = _options.clientConfig
     const apiHost = apiUrl || 'https://api.sanity.io'
-    return new ImageUrlBuilder(null, {
+    options = {
       baseUrl: apiHost.replace(/^https:\/\/api\./, 'https://cdn.'),
       projectId,
       dataset,
-    })
+    }
   }
 
   // Or just accept the options as given
-  return new ImageUrlBuilder(null, options || {})
+  else {
+    options = _options || {}
+  }
+
+  return new Builder(null, options) as InstanceType<C>
+}
+
+/**
+ * @public
+ */
+export default function urlBuilder(
+  options?: SanityClientLike | SanityProjectDetails | SanityModernClientLike
+) {
+  return createBuilder(ImageUrlBuilder, options)
 }
 
 /**
@@ -87,7 +105,7 @@ export class ImageUrlBuilder {
       : {...(options || {})} // Copy options
   }
 
-  withOptions(options: Partial<ImageUrlBuilderOptionsWithAliases>) {
+  protected constructNewOptions(options: Partial<ImageUrlBuilderOptionsWithAliases>) {
     const baseUrl = options.baseUrl || this.options.baseUrl
 
     const newOptions: {[key: string]: any} = {baseUrl}
@@ -97,8 +115,12 @@ export class ImageUrlBuilder {
         newOptions[specKey] = options[key]
       }
     }
+    return {baseUrl, ...newOptions}
+  }
 
-    return new ImageUrlBuilder(this, {baseUrl, ...newOptions})
+  withOptions(options: Partial<ImageUrlBuilderOptionsWithAliases>): this {
+    const newOptions = this.constructNewOptions(options)
+    return new ImageUrlBuilder(this, newOptions) as this
   }
 
   // The image to be represented. Accepts a Sanity 'image'-document, 'asset'-document or
