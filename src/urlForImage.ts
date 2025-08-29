@@ -1,6 +1,6 @@
 import parseAssetId from './parseAssetId'
 import parseSource, {isInProgressUpload} from './parseSource'
-import {
+import type {
   CropSpec,
   HotspotSpec,
   ImageUrlBuilderOptions,
@@ -90,7 +90,7 @@ function specToImageUrl(spec: ImageUrlBuilderOptionsWithAsset) {
   const filename = `${spec.asset.id}-${spec.asset.width}x${spec.asset.height}.${spec.asset.format}${vanityStub}`
   const baseUrl = `${cdnUrl}/images/${spec.projectId}/${spec.dataset}/${filename}`
 
-  const params = []
+  const params: string[] = []
 
   if (spec.rect) {
     // Only bother url with a crop if it actually crops anything

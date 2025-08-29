@@ -1,18 +1,13 @@
 {
+  "extends": "@sanity/pkg-utils/tsconfig/strictest.json",
   "compilerOptions": {
-    "moduleResolution": "node",
-    "target": "es5",
-    "module": "es2015",
-    "lib": ["es2015", "dom"],
-    "strict": true,
-    "sourceMap": true,
-    "esModuleInterop": true,
-    "declaration": true,
-    "declarationDir": "lib/types",
-    "outDir": "lib/node/",
-    "pretty": true,
-    "typeRoots": ["node_modules/@types"],
-    "skipLibCheck": true
+    "rootDir": ".",
+    "outDir": "lib",
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "exactOptionalPropertyTypes": false,
+    "noUncheckedIndexedAccess": false
   },
-  "include": ["src"]
+  "include": ["src/**/*.ts"],
+  "exclude": ["lib", "node_modules"]
 }

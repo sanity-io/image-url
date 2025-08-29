@@ -41,6 +41,9 @@ function rewriteSpecName(key: string) {
   return key
 }
 
+/**
+ * @public
+ */
 export default function urlBuilder(
   options?: SanityClientLike | SanityProjectDetails | SanityModernClientLike
 ) {
@@ -72,6 +75,9 @@ export default function urlBuilder(
   return new ImageUrlBuilder(null, options || {})
 }
 
+/**
+ * @public
+ */
 export class ImageUrlBuilder {
   public options: ImageUrlBuilderOptions
 
