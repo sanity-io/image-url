@@ -1,3 +1,4 @@
+import {describe, test, expect} from 'vitest'
 import urlForImage from '../src/urlForImage'
 import {
   croppedImage,

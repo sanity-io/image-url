@@ -1,5 +1,6 @@
 import {createClient} from '@sanity/client'
 import sanityImage from '../src/builder'
+import {describe, test, expect} from 'vitest'
 import {croppedImage, imageWithNoCropSpecified, noHotspotImage} from './fixtures'
 
 const urlFor = sanityImage().projectId('zp7mbokg').dataset('production')

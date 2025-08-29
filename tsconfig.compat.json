@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "rootDir": "src",
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "declarationDir": "lib/types",
+    "declarationMap": false,
+    "stripInternal": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "skipLibCheck": false,
+    "noEmit": false
+  },
+  "include": ["src/**/*.ts"]
+}

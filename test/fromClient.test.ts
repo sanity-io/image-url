@@ -1,3 +1,4 @@
+import {describe, test, expect} from 'vitest'
 import imgUrl from '../src'
 
 describe('init from client', () => {
