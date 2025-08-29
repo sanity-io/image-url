@@ -9,6 +9,11 @@
       "import": "./lib/index.js",
       "default": "./lib/index.js"
     },
+    "./signed": {
+      "source": "./src/signed/index.ts",
+      "import": "./lib/signed/index.js",
+      "default": "./lib/signed/index.js"
+    },
     "./package.json": "./package.json"
   },
   "main": "./lib/index.js",
@@ -79,5 +84,8 @@
     "content",
     "image-url"
   ],
+  "dependencies": {
+    "@sanity/signed-urls": "^2.0.1"
+  },
   "packageManager": "pnpm@10.15.0"
 }
