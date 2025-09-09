@@ -1,6 +1,4 @@
-import builder from './builder'
-
-export default builder
+export {urlBuilder} from './builder'
 
 export type {
   AutoMode,

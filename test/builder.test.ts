@@ -1,9 +1,9 @@
 import {createClient} from '@sanity/client'
-import sanityImage from '../src/builder'
+import {urlBuilder} from '../src/builder'
 import {describe, test, expect} from 'vitest'
 import {croppedImage, imageWithNoCropSpecified, noHotspotImage} from './fixtures'
 
-const urlFor = sanityImage().projectId('zp7mbokg').dataset('production')
+const urlFor = urlBuilder().projectId('zp7mbokg').dataset('production')
 
 function stripPath(url: string | null): string {
   return (url || '').split('?')[1] || ''
@@ -262,7 +262,7 @@ describe('builder', () => {
 
   test('should allow specifying baseUrl directly', () => {
     expect(
-      sanityImage({
+      urlBuilder({
         baseUrl: 'https://cdn.mydomain.com',
         projectId: 'aardvark',
         dataset: 'animals',
@@ -283,7 +283,7 @@ describe('builder', () => {
       },
     }
     expect(
-      sanityImage(client)
+      urlBuilder(client)
         .image('image-928ac96d53b0c9049836c86ff25fd3c009039a16-200x200-png')
         .toString()
     ).toBe(
@@ -300,7 +300,7 @@ describe('builder', () => {
       useCdn: false,
     })
     expect(
-      sanityImage(client)
+      urlBuilder(client)
         .image('image-928ac96d53b0c9049836c86ff25fd3c009039a16-200x200-png')
         .toString()
     ).toBe(

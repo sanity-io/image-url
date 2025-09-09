@@ -1,5 +1,5 @@
 import {test, expect} from 'vitest'
-import parseAssetId from '../src/parseAssetId'
+import {parseAssetId} from '../src/parseAssetId'
 
 test('throws on invalid document id', () => {
   expect(() => parseAssetId('moop')).toThrowErrorMatchingSnapshot()

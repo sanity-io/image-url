@@ -8,18 +8,19 @@ In addition to the core use case, this library provides a handy builder to acces
 
 ## Getting started
 
-    npm install --save @sanity/image-url
+```sh
+npm install --save @sanity/image-url
+```
 
 ## Usage
 
 The most common way to use this library in your project is to configure it by passing it [your configured sanityClient](https://www.npmjs.com/package/@sanity/client). That way it will automatically be preconfigured to your current project and dataset:
 
 ```js
-import React from 'react'
 import myConfiguredSanityClient from './sanityClient'
-import imageUrlBuilder from '@sanity/image-url'
+import {urlBuilder} from '@sanity/image-url'
 
-const builder = imageUrlBuilder(myConfiguredSanityClient)
+const builder = urlBuilder(myConfiguredSanityClient)
 
 function urlFor(source) {
   return builder.image(source)
@@ -162,9 +163,9 @@ Specifies min/max dimensions when cropping.
 You can specify a custom `baseUrl` in the builder options in order to override the default (`https://cdn.sanity.io`):
 
 ```js
-import imageUrlBuilder from '@sanity/image-url'
+import {urlBuilder} from '@sanity/image-url'
 
-const builder = imageUrlBuilder({
+const builder = urlBuilder({
   baseUrl: 'https://my.custom.domain',
   projectId: 'abc123',
   dataset: 'production',
@@ -183,10 +184,10 @@ urlFor('image-928ac96d53b0c9049836c86ff25fd3c009039a16-200x200-png')
 If you already have a configured client instance:
 
 ```js
-import imageUrlBuilder from '@sanity/image-url'
+import {urlBuilder} from '@sanity/image-url'
 import myConfiguredClient from './mySanityClient'
 
-const builder = imageUrlBuilder({
+const builder = urlBuilder({
   ...myConfiguredClient.config(),
   baseUrl: 'https://my.custom.domain',
 })

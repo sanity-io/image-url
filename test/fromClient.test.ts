@@ -1,12 +1,12 @@
 import {describe, test, expect} from 'vitest'
-import imgUrl from '../src'
+import {urlBuilder} from '../src/builder'
 
 describe('init from client', () => {
   test('can get config from client', () => {
     const client = {
       clientConfig: {projectId: 'abc123', dataset: 'foo', apiHost: 'https://cdn.sanity.io'},
     }
-    expect(imgUrl(client).image('image-abc123-200x200-png').toString()).toBe(
+    expect(urlBuilder(client).image('image-abc123-200x200-png').toString()).toBe(
       'https://cdn.sanity.io/images/abc123/foo/abc123-200x200.png'
     )
   })
@@ -19,7 +19,7 @@ describe('init from client', () => {
         dataset: 'foo',
       },
     }
-    expect(imgUrl(client).image('image-abc123-200x200-png').toString()).toBe(
+    expect(urlBuilder(client).image('image-abc123-200x200-png').toString()).toBe(
       'https://cdn.sanity.lol/images/abc123/foo/abc123-200x200.png'
     )
   })

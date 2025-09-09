@@ -1,5 +1,5 @@
-import parseAssetId from './parseAssetId'
-import parseSource, {isInProgressUpload} from './parseSource'
+import {parseAssetId} from './parseAssetId'
+import {parseSource, isInProgressUpload} from './parseSource'
 import type {
   CropSpec,
   HotspotSpec,
@@ -34,7 +34,10 @@ export const SPEC_NAME_TO_URL_NAME_MAPPINGS = [
   ['frame', 'frame'],
 ]
 
-export default function urlForImage(options: ImageUrlBuilderOptions): string {
+/**
+ * @internal
+ */
+export function urlForImage(options: ImageUrlBuilderOptions): string {
   let spec = {...(options || {})}
   const source = spec.source
   delete spec.source
@@ -199,6 +202,3 @@ function fit(
     rect: cropRect,
   }
 }
-
-// For backwards-compatibility
-export {parseSource}

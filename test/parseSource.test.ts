@@ -1,5 +1,5 @@
 import {describe, test, expect} from 'vitest'
-import parseSource from '../src/parseSource'
+import {parseSource} from '../src/parseSource'
 import {SanityImageObject} from '../src/types'
 import {
   assetDocument,

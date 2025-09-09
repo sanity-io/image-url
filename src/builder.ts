@@ -11,7 +11,7 @@ import type {
   SanityImageSource,
   SanityProjectDetails,
 } from './types'
-import urlForImage, {SPEC_NAME_TO_URL_NAME_MAPPINGS} from './urlForImage'
+import {urlForImage, SPEC_NAME_TO_URL_NAME_MAPPINGS} from './urlForImage'
 
 const validFits = ['clip', 'crop', 'fill', 'fillmax', 'max', 'scale', 'min']
 const validCrops = ['top', 'bottom', 'left', 'right', 'center', 'focalpoint', 'entropy']
@@ -44,7 +44,7 @@ function rewriteSpecName(key: string) {
 /**
  * @public
  */
-export default function urlBuilder(
+export function urlBuilder(
   options?: SanityClientLike | SanityProjectDetails | SanityModernClientLike
 ) {
   // Did we get a modernish client?
@@ -76,7 +76,7 @@ export default function urlBuilder(
 }
 
 /**
- * @public
+ * @internal
  */
 export class ImageUrlBuilder {
   public options: ImageUrlBuilderOptions

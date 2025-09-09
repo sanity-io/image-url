@@ -7,33 +7,22 @@
     ".": {
       "source": "./src/index.ts",
       "import": "./lib/index.js",
-      "require": "./lib/index.cjs",
       "default": "./lib/index.js"
-    },
-    "./lib/types/*": {
-      "import": "./lib/compat/empty.js",
-      "require": "./lib/compat/empty.cjs",
-      "default": "./lib/compat/empty.js"
     },
     "./package.json": "./package.json"
   },
-  "main": "./lib/index.cjs",
+  "main": "./lib/index.js",
   "module": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "files": [
     "lib",
-    "src",
-    "build/compat-shims.mjs"
+    "src"
   ],
   "sideEffects": false,
-  "amdName": "SanityImageUrlBuilder",
   "scripts": {
     "prepublishOnly": "npm run build",
     "prebuild": "rimraf lib coverage .rts2*",
     "build": "pkg build --strict",
-    "build:compat": "tsc -p tsconfig.compat.json && node build/compat-runtime-stubs.mjs",
-    "postbuild": "npm run build:compat",
-    "prepack": "npm run build:compat",
     "lint": "tslint  --project tsconfig.json -t codeFrame 'src/**/*.ts' 'test/**/*.ts'",
     "test": "vitest run --coverage",
     "test:watch": "vitest coverage",
@@ -44,7 +33,7 @@
   },
   "browserslist": "extends @sanity/browserslist-config",
   "engines": {
-    "node": ">=10.0.0"
+    "node": ">=20.19.0"
   },
   "prettier": {
     "semi": false,
@@ -64,7 +53,6 @@
     "@sanity/pkg-utils": "^8.0.3",
     "@types/node": "^24.3.0",
     "@vitest/coverage-v8": "^3.2.4",
-    "microbundle": "^0.15.1",
     "prettier": "^2.5.1",
     "rimraf": "^3.0.2",
     "tslint": "^6.1.3",
