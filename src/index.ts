@@ -1,4 +1,4 @@
-export {urlBuilder} from './builder'
+export {createImageUrlBuilder} from './builder'
 
 export type {
   AutoMode,

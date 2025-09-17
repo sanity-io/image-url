@@ -1,5 +1,5 @@
 import {describe, test, expect} from 'vitest'
-import {urlBuilder} from '../src/builder'
+import {createImageUrlBuilder} from '../src/builder'
 
 describe('custom domains', () => {
   test('can specify `baseUrl`', () => {
@@ -9,7 +9,7 @@ describe('custom domains', () => {
       baseUrl: 'https://mycustom.domain',
     }
     expect(
-      urlBuilder(options)
+      createImageUrlBuilder(options)
         .image('image-928ac96d53b0c9049836c86ff25fd3c009039a16-200x200-png')
         .toString()
     ).toBe(
@@ -24,7 +24,7 @@ describe('custom domains', () => {
       baseUrl: 'https://mycustom.domain/',
     }
     expect(
-      urlBuilder(options)
+      createImageUrlBuilder(options)
         .image('image-928ac96d53b0c9049836c86ff25fd3c009039a16-200x200-png')
         .toString()
     ).toBe(
@@ -41,7 +41,7 @@ describe('custom domains', () => {
       },
     }
     expect(
-      urlBuilder(options)
+      createImageUrlBuilder(options)
         .image('image-928ac96d53b0c9049836c86ff25fd3c009039a16-200x200-png')
         .toString()
     ).toBe(

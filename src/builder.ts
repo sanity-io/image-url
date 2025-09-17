@@ -44,7 +44,7 @@ function rewriteSpecName(key: string) {
 /**
  * @public
  */
-export function urlBuilder(
+export function createImageUrlBuilder(
   options?: SanityClientLike | SanityProjectDetails | SanityModernClientLike
 ) {
   // Did we get a modernish client?
