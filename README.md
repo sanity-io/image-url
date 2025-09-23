@@ -193,6 +193,10 @@ const builder = createImageUrlBuilder({
 })
 ```
 
+## Migration Guides
+
+If you're upgrading from v1 to v2, please see the [Migration Guide](./MIGRATE-v1-to-v2.md) for instructions on breaking changes and how to update your code.
+
 ## How to publish
 
 1. On your development PR (or after), you can run a command `pnpm changeset add`
