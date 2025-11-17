@@ -193,6 +193,96 @@ const builder = createImageUrlBuilder({
 })
 ```
 
+## Signed URLs
+
+> ℹ️ URL signing is available to select Enterprise accounts using the [Media Library](https://www.sanity.io/media-library). Get in touch with your sales executive to learn more.
+
+Signed URLs provide a secure way to deliver assets through Sanity’s CDN. Each URL includes a signature that both validates access and ensures the asset is served only with the exact transformations specified in the URL. This prevents unauthorized use, hotlinking, and unapproved image manipulation.
+
+> ⚠️ **Important:** URL signing should only be performed server-side. Never expose your private signing key in client-side code.
+
+### Getting started with signing
+
+To sign URLs, you'll need the following credentials, which can be generated via your Media Library's settings:
+
+1. a **Key ID** - The unique identifier for your signing key
+2. a **Private key** - The key used to generated URL signatures
+
+### Basic usage
+
+Import from the `signed` submodule to create a builder that supports signing:
+
+```js
+import {createImageUrlBuilder} from '@sanity/image-url/signed'
+
+const builder = createImageUrlBuilder({
+  projectId: 'abc123',
+  dataset: 'production',
+})
+
+const signedUrl = builder
+  .image('image-928ac96d53b0c9049836c86ff25fd3c009039a16-200x200-png')
+  .width(500)
+  .signingKey('my-key-id', 'my-private-key')
+  .signedUrl()
+
+// output: https://cdn.sanity.io/images/abc123/production/928ac96d53b0c9049836c86ff25fd3c009039a16-200x200.png?w=500&h=300&keyid=my-key-id&signature=...
+```
+
+### Setting an expiry time
+
+You can specify an expiry time for signed URLs to ensure they're only valid for a limited period:
+
+```js
+// Using an ISO 8601 date string
+const url = builder
+  .image(author.image)
+  .width(500)
+  .signingKey('my-key-id', 'my-private-key-hex-string')
+  .expiry('2025-12-31T23:59:59Z')
+  .signedUrl()
+
+// Using a Date object
+const expiryDate = new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 hours from now
+const url = builder
+  .image(author.image)
+  .width(500)
+  .signingKey('my-key-id', 'my-private-key')
+  .expiry(expiryDate)
+  .signedUrl()
+```
+
+### Creating a reusable signed builder
+
+For convenience, you can call `signingKey()` early to create a reusable builder instance to automatically sign all URLs:
+
+```js
+import {createImageUrlBuilder} from '@sanity/image-url/signed'
+
+// Create a builder with signing credentials configured
+const signedBuilder = createImageUrlBuilder({
+  projectId: 'abc123',
+  dataset: 'production',
+}).signingKey('my-key-id', 'my-private-key')
+
+// Now you can reuse this builder for multiple images
+function urlFor(source) {
+  return signedBuilder.image(source)
+}
+
+// Use it just like the regular builder, but call signedUrl() instead of url()
+const url1 = urlFor(author.image).width(200).signedUrl()
+const url2 = urlFor(movie.poster).width(500).height(300).signedUrl()
+```
+
+### Important notes
+
+- The signed builder includes all the same methods as the regular builder (`width()`, `height()`, `blur()`, etc.)
+- Call `signedUrl()` instead of `url()` to generate a signed URL
+- If you call `url()` on a signed builder, it will return a regular unsigned URL
+- Use `signingKey()` before calling `signedUrl()`
+- Expiry times must be in the future
+
 ## Migration Guides
 
 If you're upgrading from v1 to v2, please see the [Migration Guide](./MIGRATE-v1-to-v2.md) for instructions on breaking changes and how to update your code.
