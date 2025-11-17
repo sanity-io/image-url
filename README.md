@@ -158,7 +158,8 @@ Specifies min/max dimensions when cropping.
 
 ## Custom CDN domains
 
-> ℹ️ This feature is available to select Enterprise accounts. Get in touch with your sales executive to learn more.
+> [!NOTE]
+> This feature is available to select Enterprise accounts. Get in touch with your sales executive to learn more.
 
 You can specify a custom `baseUrl` in the builder options in order to override the default (`https://cdn.sanity.io`):
 
@@ -195,11 +196,13 @@ const builder = createImageUrlBuilder({
 
 ## Signed URLs
 
-> ℹ️ URL signing is available to select Enterprise accounts using the [Media Library](https://www.sanity.io/media-library). Get in touch with your sales executive to learn more.
+> [!NOTE]
+> URL signing is available to select Enterprise accounts using the [Media Library](https://www.sanity.io/media-library). Get in touch with your sales executive to learn more.
 
-Signed URLs provide a secure way to deliver assets through Sanity’s CDN. Each URL includes a signature that both validates access and ensures the asset is served only with the exact transformations specified in the URL. This prevents unauthorized use, hotlinking, and unapproved image manipulation.
+Signed URLs provide a secure way to deliver assets through Sanity's CDN. Each URL includes a signature that both validates access and ensures the asset is served only with the exact transformations specified in the URL. This prevents unauthorized use, hotlinking, and unapproved image manipulation.
 
-> ⚠️ **Important:** URL signing should only be performed server-side. Never expose your private signing key in client-side code.
+> [!WARNING]
+> URL signing should only be performed server-side. Never expose your private signing key in client-side code.
 
 ### Getting started with signing
 
