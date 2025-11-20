@@ -12,6 +12,7 @@ export type {
   ImageUrlBuilderOptionsWithAsset,
   Orientation,
   SanityAsset,
+  SanityClientConfig,
   SanityClientLike,
   SanityImageCrop,
   SanityImageDimensions,

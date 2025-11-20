@@ -23,4 +23,30 @@ describe('init from client', () => {
       'https://cdn.sanity.lol/images/abc123/foo/abc123-200x200.png'
     )
   })
+
+  test('can get media library base url from legacy client config', () => {
+    const client = {
+      clientConfig: {
+        apiHost: 'https://api.sanity.io',
+        '~experimental_resource': {type: 'media-library' as const, id: 'library123'},
+      },
+    }
+
+    expect(createImageUrlBuilder(client).image('image-abc123-200x200-png').toString()).toBe(
+      'https://cdn.sanity.io/media-libraries/library123/images/abc123-200x200.png'
+    )
+  })
+
+  test('can get media library base url from modern client config', () => {
+    const client = {
+      config: () => ({
+        apiHost: 'https://api.sanity.io',
+        '~experimental_resource': {type: 'media-library' as const, id: 'library123'},
+      }),
+    }
+
+    expect(createImageUrlBuilder(client).image('image-abc123-200x200-png').toString()).toBe(
+      'https://cdn.sanity.io/media-libraries/library123/images/abc123-200x200.png'
+    )
+  })
 })

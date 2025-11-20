@@ -5,6 +5,7 @@ import type {
   ImageFormat,
   ImageUrlBuilderOptions,
   ImageUrlBuilderOptionsWithAliases,
+  SanityClientConfig,
   SanityModernClientLike,
   Orientation,
   SanityClientLike,
@@ -27,6 +28,25 @@ function isSanityClientLike(
   client?: SanityClientLike | SanityProjectDetails | SanityModernClientLike
 ): client is SanityClientLike {
   return client && 'clientConfig' in client ? typeof client.clientConfig === 'object' : false
+}
+
+function clientConfigToOptions(config: SanityClientConfig): ImageUrlBuilderOptions {
+  const {apiHost: apiUrl, projectId, dataset} = config
+  const apiHost = apiUrl || 'https://api.sanity.io'
+  const baseOptions: ImageUrlBuilderOptions = {
+    baseUrl: apiHost.replace(/^https:\/\/api\./, 'https://cdn.'),
+  }
+
+  const resource = config['~experimental_resource']
+  if (resource?.type === 'media-library') {
+    if (typeof resource.id !== 'string' || resource.id.length === 0) {
+      throw new Error('Media library clients must include an id in "~experimental_resource"')
+    }
+
+    return {...baseOptions, mediaLibraryId: resource.id}
+  }
+
+  return {...baseOptions, projectId, dataset}
 }
 
 /**
@@ -55,25 +75,13 @@ export function createBuilder<C extends typeof ImageUrlBuilder>(
 
   if (isSanityModernClientLike(_options)) {
     // Inherit config from client
-    const {apiHost: apiUrl, projectId, dataset} = _options.config()
-    const apiHost = apiUrl || 'https://api.sanity.io'
-    options = {
-      baseUrl: apiHost.replace(/^https:\/\/api\./, 'https://cdn.'),
-      projectId,
-      dataset,
-    }
+    options = clientConfigToOptions(_options.config())
   }
 
   // Did we get a SanityClient?
   else if (isSanityClientLike(_options)) {
     // Inherit config from client
-    const {apiHost: apiUrl, projectId, dataset} = _options.clientConfig
-    const apiHost = apiUrl || 'https://api.sanity.io'
-    options = {
-      baseUrl: apiHost.replace(/^https:\/\/api\./, 'https://cdn.'),
-      projectId,
-      dataset,
-    }
+    options = clientConfigToOptions(_options.clientConfig)
   }
 
   // Or just accept the options as given
