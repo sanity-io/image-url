@@ -64,14 +64,8 @@ export function rewriteSpecName(key: string) {
   return key
 }
 
-/**
- * @internal
- */
-export function createBuilder<C extends typeof ImageUrlBuilder>(
-  Builder: C,
-  _options?: SanityClientLike | SanityProjectDetails | SanityModernClientLike
-): InstanceType<C> {
-  let options: ConstructorParameters<C>[1] = {}
+function getOptions(_options?: SanityClientLike | SanityProjectDetails | SanityModernClientLike) {
+  let options: ImageUrlBuilderOptions = {}
 
   if (isSanityModernClientLike(_options)) {
     // Inherit config from client
@@ -89,6 +83,17 @@ export function createBuilder<C extends typeof ImageUrlBuilder>(
     options = _options || {}
   }
 
+  return options
+}
+
+/**
+ * @internal
+ */
+export function createBuilder<C extends typeof ImageUrlBuilder>(
+  Builder: C,
+  _options?: SanityClientLike | SanityProjectDetails | SanityModernClientLike
+): InstanceType<C> {
+  const options = getOptions(_options)
   return new Builder(null, options) as InstanceType<C>
 }
 
@@ -146,6 +151,18 @@ export class ImageUrlBuilder {
   // Specify the projectId
   projectId(projectId: string) {
     return this.withOptions({projectId})
+  }
+
+  withClient(client: SanityClientLike | SanityProjectDetails | SanityModernClientLike) {
+    const newOptions = getOptions(client)
+
+    const preservedOptions = {...this.options}
+    delete preservedOptions.baseUrl
+    delete preservedOptions.projectId
+    delete preservedOptions.dataset
+    delete preservedOptions.mediaLibraryId
+
+    return new ImageUrlBuilder(null, {...newOptions, ...preservedOptions}) as this
   }
 
   // Specify background color

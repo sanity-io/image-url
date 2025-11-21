@@ -49,4 +49,56 @@ describe('init from client', () => {
       'https://cdn.sanity.io/media-libraries/library123/images/abc123-200x200.png'
     )
   })
+
+  test('withClient swaps to media library client and preserves options', () => {
+    const datasetClient = {
+      clientConfig: {
+        apiHost: 'https://api.sanity.io',
+        projectId: 'abc123',
+        dataset: 'foo',
+      },
+    }
+
+    const mediaClient = {
+      clientConfig: {
+        apiHost: 'https://api.sanity.io',
+        '~experimental_resource': {type: 'media-library' as const, id: 'library123'},
+      },
+    }
+
+    const builder = createImageUrlBuilder(datasetClient)
+      .image('image-abc123-200x200-png')
+      .width(200)
+
+    const swapped = builder.withClient(mediaClient)
+
+    expect(swapped).not.toBe(builder)
+    expect(swapped.toString()).toBe(
+      'https://cdn.sanity.io/media-libraries/library123/images/abc123-200x200.png?w=200'
+    )
+    expect(builder.toString()).toBe(
+      'https://cdn.sanity.io/images/abc123/foo/abc123-200x200.png?w=200'
+    )
+  })
+
+  test('withClient can swap back to project/dataset from media library', () => {
+    const mediaClient = {
+      clientConfig: {
+        apiHost: 'https://api.sanity.io',
+        '~experimental_resource': {type: 'media-library' as const, id: 'library123'},
+      },
+    }
+
+    const builder = createImageUrlBuilder(mediaClient).image('image-abc123-200x200-png').width(320)
+
+    const datasetBuilder = builder.withClient({
+      baseUrl: 'https://cdn.otherhost.io',
+      projectId: 'proj123',
+      dataset: 'animals',
+    })
+
+    expect(datasetBuilder.toString()).toBe(
+      'https://cdn.otherhost.io/images/proj123/animals/abc123-200x200.png?w=320'
+    )
+  })
 })
