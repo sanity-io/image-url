@@ -92,11 +92,10 @@ export type AutoMode = 'format'
 export type Orientation = 0 | 90 | 180 | 270
 
 /**
- * Only Media Library is currently supported
  * @internal
  */
-export type SanityClientConfigResource = {
-  type: 'media-library'
+export interface SanityClientConfigResource {
+  type: string
   id: string
 }
 
