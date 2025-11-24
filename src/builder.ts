@@ -322,3 +322,8 @@ export class ImageUrlBuilder {
     return this.url()
   }
 }
+
+/**
+ * @public
+ */
+export type ImageUrlBuilderType = InstanceType<typeof ImageUrlBuilder>
