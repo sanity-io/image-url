@@ -95,7 +95,7 @@ export type Orientation = 0 | 90 | 180 | 270
  * @internal
  */
 export interface SanityClientConfigResource {
-  type: string
+  type: 'media-library' | string & {}
   id: string
 }
 
