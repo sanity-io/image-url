@@ -62,3 +62,8 @@ export function createImageUrlBuilder(
 ) {
   return createBuilder(ImageSignedUrlBuilder, options)
 }
+
+/**
+ * @public
+ */
+export type ImageUrlBuilderType = InstanceType<typeof ImageSignedUrlBuilder>

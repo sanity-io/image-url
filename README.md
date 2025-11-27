@@ -57,6 +57,21 @@ Specify the image to be rendered. Accepts either a Sanity `image` record, an `as
 
 Usually you should preconfigure your builder with dataset and project id, but even when you did, these let you temporarily override them if you need to render assets from other projects or datasets.
 
+### `withClient(client)`
+
+Switch the builder to use another client configuration. `withClient()` accepts the same input as `createImageUrlBuilder` (a configured Sanity client or raw project details) and returns a builder that keeps any previously chained options while inheriting the new client's base URL.
+
+```ts
+const builder = createImageUrlBuilder(primaryClient).image(doc.image).width(400)
+const otherBuilder = builder.withClient(secondaryClient)
+
+builder.url()
+// https://cdn.sanity.io/images/myProject/production/…?w=400
+
+otherBuilder.url()
+// https://cdn.sanity.io/images/anotherProject/staging/…?w=400
+```
+
 ### `width(pixels)`
 
 Specify the width of the rendered image in pixels.

@@ -3,6 +3,7 @@
  */
 export type ImageUrlBuilderOptions = Partial<SanityProjectDetails> & {
   baseUrl?: string
+  mediaLibraryId?: string
   source?: SanityImageSource
   bg?: string
   dpr?: number
@@ -91,17 +92,36 @@ export type AutoMode = 'format'
 export type Orientation = 0 | 90 | 180 | 270
 
 /**
+ * @internal
+ */
+export interface SanityClientConfigResource {
+  type: 'media-library' | string & {}
+  id: string
+}
+
+/**
+ * @public
+ */
+export interface SanityClientConfig {
+  dataset?: string
+  projectId?: string
+  apiHost?: string
+  /** @internal */
+  '~experimental_resource'?: SanityClientConfigResource
+}
+
+/**
  * @public
  */
 export interface SanityClientLike {
-  clientConfig: {dataset?: string; projectId?: string; apiHost?: string}
+  clientConfig: SanityClientConfig
 }
 
 /**
  * @public
  */
 export type SanityModernClientLike = {
-  config(): {dataset?: string; projectId?: string; apiHost?: string}
+  config(): SanityClientConfig
 }
 
 /**

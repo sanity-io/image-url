@@ -91,7 +91,9 @@ function specToImageUrl(spec: ImageUrlBuilderOptionsWithAsset) {
   const cdnUrl = (spec.baseUrl || 'https://cdn.sanity.io').replace(/\/+$/, '')
   const vanityStub = spec.vanityName ? `/${spec.vanityName}` : ''
   const filename = `${spec.asset.id}-${spec.asset.width}x${spec.asset.height}.${spec.asset.format}${vanityStub}`
-  const baseUrl = `${cdnUrl}/images/${spec.projectId}/${spec.dataset}/${filename}`
+  const baseUrl = spec.mediaLibraryId
+    ? `${cdnUrl}/media-libraries/${spec.mediaLibraryId}/images/${filename}`
+    : `${cdnUrl}/images/${spec.projectId}/${spec.dataset}/${filename}`
 
   const params: string[] = []
 

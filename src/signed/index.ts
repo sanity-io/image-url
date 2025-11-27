@@ -1,4 +1,4 @@
-export {createImageUrlBuilder} from './signed-builder'
+export {createImageUrlBuilder, type ImageUrlBuilderType as ImageUrlBuilder} from './signed-builder'
 
 export type {
   AutoMode,
@@ -12,6 +12,7 @@ export type {
   ImageUrlBuilderOptionsWithAsset,
   Orientation,
   SanityAsset,
+  SanityClientConfig,
   SanityClientLike,
   SanityImageCrop,
   SanityImageDimensions,
