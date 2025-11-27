@@ -1,4 +1,5 @@
-import parseSource from '../src/parseSource'
+import {describe, test, expect} from 'vitest'
+import {parseSource} from '../src/parseSource'
 import {SanityImageObject} from '../src/types'
 import {
   assetDocument,
@@ -99,15 +100,15 @@ describe('parseSource', () => {
     )
 
     expect(parseSource(noCrop)).toMatchInlineSnapshot(`
-      Object {
+      {
         "_type": "image",
-        "crop": Object {
+        "crop": {
           "bottom": 0,
           "left": 2,
           "right": 3,
           "top": 1,
         },
-        "hotspot": Object {
+        "hotspot": {
           "height": 0.99,
           "width": 0.98,
           "x": 0.51,

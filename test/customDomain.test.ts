@@ -1,4 +1,5 @@
-import imgUrl from '../src'
+import {describe, test, expect} from 'vitest'
+import {createImageUrlBuilder} from '../src/builder'
 
 describe('custom domains', () => {
   test('can specify `baseUrl`', () => {
@@ -8,7 +9,9 @@ describe('custom domains', () => {
       baseUrl: 'https://mycustom.domain',
     }
     expect(
-      imgUrl(options).image('image-928ac96d53b0c9049836c86ff25fd3c009039a16-200x200-png').toString()
+      createImageUrlBuilder(options)
+        .image('image-928ac96d53b0c9049836c86ff25fd3c009039a16-200x200-png')
+        .toString()
     ).toBe(
       'https://mycustom.domain/images/xyz321/staging/928ac96d53b0c9049836c86ff25fd3c009039a16-200x200.png'
     )
@@ -21,7 +24,9 @@ describe('custom domains', () => {
       baseUrl: 'https://mycustom.domain/',
     }
     expect(
-      imgUrl(options).image('image-928ac96d53b0c9049836c86ff25fd3c009039a16-200x200-png').toString()
+      createImageUrlBuilder(options)
+        .image('image-928ac96d53b0c9049836c86ff25fd3c009039a16-200x200-png')
+        .toString()
     ).toBe(
       'https://mycustom.domain/images/xyz321/staging/928ac96d53b0c9049836c86ff25fd3c009039a16-200x200.png'
     )
@@ -36,7 +41,9 @@ describe('custom domains', () => {
       },
     }
     expect(
-      imgUrl(options).image('image-928ac96d53b0c9049836c86ff25fd3c009039a16-200x200-png').toString()
+      createImageUrlBuilder(options)
+        .image('image-928ac96d53b0c9049836c86ff25fd3c009039a16-200x200-png')
+        .toString()
     ).toBe(
       'https://cdn.totally.custom/images/xyz321/staging/928ac96d53b0c9049836c86ff25fd3c009039a16-200x200.png'
     )

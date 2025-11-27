@@ -1,4 +1,4 @@
-import {
+import type {
   SanityAsset,
   SanityImageObject,
   SanityImageSource,
@@ -31,9 +31,11 @@ export const isInProgressUpload = (src: SanityImageSource): boolean => {
   return false
 }
 
-// Convert an asset-id, asset or image to an image record suitable for processing
-// eslint-disable-next-line complexity
-export default function parseSource(source?: SanityImageSource) {
+/**
+ * @internal
+ * Convert an asset-id, asset or image to an image record suitable for processing
+ */
+export function parseSource(source?: SanityImageSource) {
   if (!source) {
     return null
   }
