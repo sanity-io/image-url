@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.0.1
+
+### Patch Changes
+
+- [#90](https://github.com/sanity-io/image-url/pull/90) [`b1ebf65`](https://github.com/sanity-io/image-url/commit/b1ebf65b4c5ae3a7eda1ac1857b531497adeedf9) Thanks [@rdunk](https://github.com/rdunk)! - Replaced the exported builder class instance types with public interfaces to avoid TS4094 errors and fixed the signed builder type export names
+
 ## 2.0.0
 
 ### Major Changes
