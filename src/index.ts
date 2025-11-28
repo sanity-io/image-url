@@ -1,4 +1,4 @@
-export {createImageUrlBuilder, type ImageUrlBuilderType as ImageUrlBuilder} from './builder'
+export {createImageUrlBuilder} from './builder'
 
 export type {
   AutoMode,
@@ -7,6 +7,7 @@ export type {
   FitMode,
   HotspotSpec,
   ImageFormat,
+  ImageUrlBuilder,
   ImageUrlBuilderOptions,
   ImageUrlBuilderOptionsWithAliases,
   ImageUrlBuilderOptionsWithAsset,

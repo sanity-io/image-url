@@ -3,6 +3,7 @@ import type {
   CropMode,
   FitMode,
   ImageFormat,
+  ImageUrlBuilder,
   ImageUrlBuilderOptions,
   ImageUrlBuilderOptionsWithAliases,
   SanityClientConfig,
@@ -89,12 +90,12 @@ function getOptions(_options?: SanityClientLike | SanityProjectDetails | SanityM
 /**
  * @internal
  */
-export function createBuilder<C extends typeof ImageUrlBuilder>(
-  Builder: C,
+export function createBuilder<Impl extends typeof ImageUrlBuilderImpl, T extends ImageUrlBuilder>(
+  Builder: Impl,
   _options?: SanityClientLike | SanityProjectDetails | SanityModernClientLike
-): InstanceType<C> {
+): T {
   const options = getOptions(_options)
-  return new Builder(null, options) as InstanceType<C>
+  return new Builder(null, options) as T
 }
 
 /**
@@ -102,38 +103,45 @@ export function createBuilder<C extends typeof ImageUrlBuilder>(
  */
 export function createImageUrlBuilder(
   options?: SanityClientLike | SanityProjectDetails | SanityModernClientLike
-) {
-  return createBuilder(ImageUrlBuilder, options)
+): ImageUrlBuilder {
+  return createBuilder(ImageUrlBuilderImpl, options)
 }
 
 /**
  * @internal
  */
-export class ImageUrlBuilder {
+
+export function constructNewOptions(
+  currentOptions: ImageUrlBuilderOptions,
+  options: Partial<ImageUrlBuilderOptionsWithAliases>
+) {
+  const baseUrl = options.baseUrl || currentOptions.baseUrl
+
+  const newOptions: {[key: string]: any} = {baseUrl}
+  for (const key in options) {
+    if (options.hasOwnProperty(key)) {
+      const specKey = rewriteSpecName(key)
+      newOptions[specKey] = options[key]
+    }
+  }
+  return {baseUrl, ...newOptions}
+}
+
+/**
+ * @internal
+ */
+export class ImageUrlBuilderImpl implements ImageUrlBuilder {
   public options: ImageUrlBuilderOptions
 
-  constructor(parent: ImageUrlBuilder | null, options: ImageUrlBuilderOptions) {
+  constructor(parent: ImageUrlBuilderImpl | null, options: ImageUrlBuilderOptions) {
     this.options = parent
       ? {...(parent.options || {}), ...(options || {})} // Merge parent options
       : {...(options || {})} // Copy options
   }
 
-  protected constructNewOptions(options: Partial<ImageUrlBuilderOptionsWithAliases>) {
-    const baseUrl = options.baseUrl || this.options.baseUrl
-
-    const newOptions: {[key: string]: any} = {baseUrl}
-    for (const key in options) {
-      if (options.hasOwnProperty(key)) {
-        const specKey = rewriteSpecName(key)
-        newOptions[specKey] = options[key]
-      }
-    }
-    return {baseUrl, ...newOptions}
-  }
-
-  withOptions(options: Partial<ImageUrlBuilderOptionsWithAliases>): this {
-    const newOptions = this.constructNewOptions(options)
-    return new ImageUrlBuilder(this, newOptions) as this
+  withOptions(options: ImageUrlBuilderOptionsWithAliases): this {
+    const newOptions = constructNewOptions(this.options, options)
+    return new ImageUrlBuilderImpl(this, newOptions) as this
   }
 
   // The image to be represented. Accepts a Sanity 'image'-document, 'asset'-document or
@@ -162,7 +170,7 @@ export class ImageUrlBuilder {
     delete preservedOptions.dataset
     delete preservedOptions.mediaLibraryId
 
-    return new ImageUrlBuilder(null, {...newOptions, ...preservedOptions}) as this
+    return new ImageUrlBuilderImpl(null, {...newOptions, ...preservedOptions}) as this
   }
 
   // Specify background color
@@ -322,8 +330,3 @@ export class ImageUrlBuilder {
     return this.url()
   }
 }
-
-/**
- * @public
- */
-export type ImageUrlBuilderType = InstanceType<typeof ImageUrlBuilder>

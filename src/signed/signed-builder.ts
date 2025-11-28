@@ -1,13 +1,12 @@
-import {createBuilder, ImageUrlBuilder} from '../builder'
+import {constructNewOptions, createBuilder, ImageUrlBuilderImpl} from '../builder'
 import {signedUrlForImage} from './signedUrlForImage'
-import type {ImageUrlSignedBuilderOptions, ImageUrlSigningOptions} from './types'
 import type {
-  ImageUrlBuilderOptions,
-  ImageUrlBuilderOptionsWithAliases,
-  SanityClientLike,
-  SanityModernClientLike,
-  SanityProjectDetails,
-} from '../types'
+  ImageUrlSigningOptions,
+  SignedImageUrlBuilder,
+  SignedImageUrlBuilderOptions,
+  SignedImageUrlBuilderOptionsWithAliases,
+} from './types'
+import type {SanityClientLike, SanityModernClientLike, SanityProjectDetails} from '../types'
 
 function assertValidSignedOptions(
   opts: Partial<ImageUrlSigningOptions>
@@ -24,18 +23,19 @@ function assertValidSignedOptions(
 /**
  * @internal
  */
-export class ImageSignedUrlBuilder extends ImageUrlBuilder {
-  public declare options: ImageUrlBuilderOptions & Partial<ImageUrlSigningOptions>
+export class SignedImageUrlBuilderImpl
+  extends ImageUrlBuilderImpl
+  implements SignedImageUrlBuilder
+{
+  public declare options: SignedImageUrlBuilderOptions
 
-  constructor(parent: ImageSignedUrlBuilder | null, options: ImageUrlSignedBuilderOptions) {
+  constructor(parent: SignedImageUrlBuilderImpl | null, options: SignedImageUrlBuilderOptions) {
     super(parent, options)
   }
 
-  override withOptions(
-    options: Partial<ImageUrlBuilderOptionsWithAliases & ImageUrlSigningOptions>
-  ): this {
-    const newOptions = this.constructNewOptions(options)
-    return new ImageSignedUrlBuilder(this, {...newOptions}) as this
+  override withOptions(options: SignedImageUrlBuilderOptionsWithAliases): this {
+    const newOptions = constructNewOptions(this.options, options)
+    return new SignedImageUrlBuilderImpl(this, {...newOptions}) as this
   }
 
   expiry(expiry: string | Date) {
@@ -59,11 +59,6 @@ export class ImageSignedUrlBuilder extends ImageUrlBuilder {
  */
 export function createImageUrlBuilder(
   options?: SanityClientLike | SanityProjectDetails | SanityModernClientLike
-) {
-  return createBuilder(ImageSignedUrlBuilder, options)
+): SignedImageUrlBuilder {
+  return createBuilder(SignedImageUrlBuilderImpl, options)
 }
-
-/**
- * @public
- */
-export type ImageUrlBuilderType = InstanceType<typeof ImageSignedUrlBuilder>
