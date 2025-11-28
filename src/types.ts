@@ -249,3 +249,47 @@ export interface HotspotSpec {
   right: number
   bottom: number
 }
+
+/**
+ * @public
+ */
+export interface ImageUrlBuilder {
+  options: ImageUrlBuilderOptions
+  withOptions(options: ImageUrlBuilderOptionsWithAliases): this
+  image(source: SanityImageSource): this
+  dataset(dataset: string): this
+  projectId(projectId: string): this
+  withClient(
+    client: SanityClientLike | SanityProjectDetails | SanityModernClientLike
+  ): ImageUrlBuilder
+  bg(bg: string): this
+  dpr(dpr: number): this
+  width(width: number): this
+  height(height: number): this
+  focalPoint(x: number, y: number): this
+  maxWidth(maxWidth: number): this
+  minWidth(minWidth: number): this
+  maxHeight(maxHeight: number): this
+  minHeight(minHeight: number): this
+  size(width: number, height: number): this
+  blur(blur: number): this
+  sharpen(sharpen: number): this
+  rect(left: number, top: number, width: number, height: number): this
+  format(format?: ImageFormat | undefined): this
+  invert(invert: boolean): this
+  orientation(orientation: Orientation): this
+  quality(quality: number): this
+  forceDownload(download: boolean | string): this
+  flipHorizontal(): this
+  flipVertical(): this
+  ignoreImageParams(): this
+  fit(value: FitMode): this
+  crop(value: CropMode): this
+  saturation(saturation: number): this
+  auto(value: AutoMode): this
+  pad(pad: number): this
+  vanityName(value: string): this
+  frame(frame: number): this
+  url(): string
+  toString(): string
+}
