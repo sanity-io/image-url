@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "noEmit": true,
+    "strict": true,
+    "module": "nodenext"
+  },
+  "files": ["./declaration.ts"]
+}

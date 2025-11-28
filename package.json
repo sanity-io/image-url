@@ -27,11 +27,13 @@
   "scripts": {
     "prepublishOnly": "npm run build",
     "prebuild": "rimraf lib coverage .rts2*",
+    "check:declaration": "tsc -p test/declaration/tsconfig.json",
     "build": "pkg build --strict",
     "lint": "tslint  --project tsconfig.json -t codeFrame 'src/**/*.ts' 'test/**/*.ts'",
     "test": "vitest run --coverage",
     "test:watch": "vitest coverage",
     "test:prod": "npm run lint && npm run test -- --no-cache",
+    "postbuild": "npm run check:declaration",
     "posttest": "npm run lint",
     "format": "prettier . --write",
     "release": "changeset publish"
