@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.0.2
+
+### Patch Changes
+
+- [#93](https://github.com/sanity-io/image-url/pull/93) [`f1cd12d`](https://github.com/sanity-io/image-url/commit/f1cd12decab289e45a035f2034c5369d1b3a5e64) Thanks [@rdunk](https://github.com/rdunk)! - Restore the legacy default builder export (marked deprecated) to maintain partial backwards compatibility.
+
 ## 2.0.1
 
 ### Patch Changes
