@@ -1,3 +1,6 @@
+import {createImageUrlBuilder} from './builder'
+import {defineDeprecated} from './compat'
+
 export {createImageUrlBuilder} from './builder'
 
 export type {
@@ -27,3 +30,10 @@ export type {
   SanityProjectDetails,
   SanityReference,
 } from './types'
+
+/**
+ * @public
+ * @deprecated Use the named export `createImageUrlBuilder` instead of the `default` export
+ */
+const deprecatedcreateImageUrlBuilder = defineDeprecated(createImageUrlBuilder)
+export default deprecatedcreateImageUrlBuilder

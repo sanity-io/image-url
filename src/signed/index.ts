@@ -1,3 +1,6 @@
+import {defineDeprecated} from '../compat'
+import {createImageUrlBuilder} from './signed-builder'
+
 export {createImageUrlBuilder} from './signed-builder'
 
 export type {
@@ -34,3 +37,10 @@ export type {
   SignedImageUrlBuilderOptionsWithAliases,
   SignedImageUrlBuilderOptionsWithAsset,
 } from './types'
+
+/**
+ * @public
+ * @deprecated Use the named export `createImageUrlBuilder` instead of the `default` export
+ */
+const deprecatedcreateImageUrlBuilder = defineDeprecated(createImageUrlBuilder)
+export default deprecatedcreateImageUrlBuilder
