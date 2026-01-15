@@ -11,7 +11,7 @@ import type {
 export interface ImageUrlSigningOptions {
   keyId: string
   privateKey: string
-  expiry?: string | Date
+  expiry: string | Date
 }
 
 /**
