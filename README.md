@@ -242,9 +242,10 @@ const signedUrl = builder
   .image('image-928ac96d53b0c9049836c86ff25fd3c009039a16-200x200-png')
   .width(500)
   .signingKey('my-key-id', 'my-private-key')
+  .expiry('2026-12-31T23:59:59Z')
   .signedUrl()
 
-// output: https://cdn.sanity.io/images/abc123/production/928ac96d53b0c9049836c86ff25fd3c009039a16-200x200.png?w=500&h=300&keyid=my-key-id&signature=...
+// output: https://cdn.sanity.io/images/abc123/production/928ac96d53b0c9049836c86ff25fd3c009039a16-200x200.png?w=500&keyid=my-key-id&expiry=2026-12-31T23:59:59Z&signature=...
 ```
 
 ### Setting an expiry time
@@ -257,7 +258,7 @@ const url = builder
   .image(author.image)
   .width(500)
   .signingKey('my-key-id', 'my-private-key-hex-string')
-  .expiry('2025-12-31T23:59:59Z')
+  .expiry('2026-12-31T23:59:59Z')
   .signedUrl()
 
 // Using a Date object
@@ -289,8 +290,8 @@ function urlFor(source) {
 }
 
 // Use it just like the regular builder, but call signedUrl() instead of url()
-const url1 = urlFor(author.image).width(200).signedUrl()
-const url2 = urlFor(movie.poster).width(500).height(300).signedUrl()
+const url1 = urlFor(author.image).width(200).expiry('2026-12-31T23:59:59Z').signedUrl()
+const url2 = urlFor(movie.poster).width(500).height(300).expiry('2026-12-31T23:59:59Z').signedUrl()
 ```
 
 ### Important notes
@@ -298,7 +299,7 @@ const url2 = urlFor(movie.poster).width(500).height(300).signedUrl()
 - The signed builder includes all the same methods as the regular builder (`width()`, `height()`, `blur()`, etc.)
 - Call `signedUrl()` instead of `url()` to generate a signed URL
 - If you call `url()` on a signed builder, it will return a regular unsigned URL
-- Use `signingKey()` before calling `signedUrl()`
+- You must call both `signingKey()` and `expiry()` before calling `signedUrl()`
 - Expiry times must be in the future
 
 ## Migration Guides

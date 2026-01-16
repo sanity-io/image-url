@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@sanity/signed-urls':
-        specifier: ^2.0.1
-        version: 2.0.1
+        specifier: ^2.0.2
+        version: 2.0.2
     devDependencies:
       '@changesets/changelog-github':
         specifier: ^0.5.1
@@ -845,8 +845,8 @@ packages:
       babel-plugin-react-compiler:
         optional: true
 
-  '@sanity/signed-urls@2.0.1':
-    resolution: {integrity: sha512-/u++FnDbaXDWHiHxG1Q4rbGsKRPf6lmTKsXeZ3bbbty/kNHDhVRUA5mRA+TtXlbPrse4ksv3a2vAerKNUNDZOw==}
+  '@sanity/signed-urls@2.0.2':
+    resolution: {integrity: sha512-w/Aq0JDYI44WC5w8mzJBAjCem8qlGrxGTzvNbUWwBfys6kSL+TZBSypV5waCc35XRgt0X5zdYZMJOrshcjJLFw==}
 
   '@sindresorhus/merge-streams@2.3.0':
     resolution: {integrity: sha512-LtoMMhxAlorcGhmFYI+LhPgbPZCkgP6ra1YL604EeF6U98pLlQ3iWIGMdWSC+vWmPBWBNgmDBAhnAobLROJmwg==}
@@ -3257,7 +3257,7 @@ snapshots:
       - supports-color
       - vue-tsc
 
-  '@sanity/signed-urls@2.0.1':
+  '@sanity/signed-urls@2.0.2':
     dependencies:
       '@noble/ed25519': 3.0.0
       '@noble/hashes': 2.0.0

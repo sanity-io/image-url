@@ -87,7 +87,7 @@
     "image-url"
   ],
   "dependencies": {
-    "@sanity/signed-urls": "^2.0.1"
+    "@sanity/signed-urls": "^2.0.2"
   },
   "packageManager": "pnpm@10.15.0"
 }

@@ -11,12 +11,16 @@ import type {SanityClientLike, SanityModernClientLike, SanityProjectDetails} fro
 function assertValidSignedOptions(
   opts: Partial<ImageUrlSigningOptions>
 ): asserts opts is ImageUrlSigningOptions {
-  if (typeof opts.keyId !== 'string') {
+  if (!opts.keyId || typeof opts.keyId !== 'string') {
     throw new Error('Cannot call `signedUrl()` without `keyId`')
   }
 
-  if (typeof opts.privateKey !== 'string') {
+  if (!opts.privateKey || typeof opts.privateKey !== 'string') {
     throw new Error('Cannot call `signedUrl()` without `privateKey`')
+  }
+
+  if (!opts.expiry || (typeof opts.expiry !== 'string' && !(opts.expiry instanceof Date))) {
+    throw new Error('Cannot call `signedUrl()` without `expiry`')
   }
 }
 

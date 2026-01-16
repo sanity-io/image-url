@@ -6,7 +6,7 @@ import {croppedImage} from './fixtures'
 
 const keyId = 'test-key-id'
 const privateKey = '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef'
-const expiry = '2025-12-31T23:59:59Z'
+const expiry = '2099-12-31T23:59:59Z'
 
 // Helpers
 const baseImage = () =>
@@ -20,7 +20,7 @@ const lastParam = (url: string) => {
 
 describe('signed-builder', () => {
   test('should generate a url with signing specific parameters', () => {
-    const url = baseImage().signingKey(keyId, privateKey).signedUrl()
+    const url = baseImage().signingKey(keyId, privateKey).expiry(expiry).signedUrl()
     expect(qp(url, 'keyid')).toBe(keyId)
     expect(qp(url, 'signature')).toBeTruthy()
   })
@@ -31,7 +31,7 @@ describe('signed-builder', () => {
     vi.stubGlobal('btoa', fakeBtoa)
 
     try {
-      const url = baseImage().signingKey(keyId, privateKey).signedUrl()
+      const url = baseImage().signingKey(keyId, privateKey).expiry(expiry).signedUrl()
       expect(qp(url, 'keyid')).toBe(keyId)
       expect(qp(url, 'signature')).toBeTruthy()
     } finally {
@@ -43,7 +43,7 @@ describe('signed-builder', () => {
     expect(() => baseImage().signedUrl()).toThrow()
   })
 
-  test('should throw if keyId is missing when calling signingKey', () => {
+  test('should throw if keyId is missing', () => {
     expect(() =>
       baseImage()
         .signingKey(undefined as any, privateKey)
@@ -51,7 +51,7 @@ describe('signed-builder', () => {
     ).toThrow(/keyId/i)
   })
 
-  test('should throw if privateKey is missing when calling signingKey', () => {
+  test('should throw if privateKey is missing', () => {
     expect(() =>
       baseImage()
         .signingKey(keyId, undefined as any)
@@ -59,7 +59,29 @@ describe('signed-builder', () => {
     ).toThrow(/privateKey/i)
   })
 
-  test('should include expiry parameter when provided', () => {
+  test('should throw if expiry is missing', () => {
+    expect(() => baseImage().signingKey(keyId, privateKey).signedUrl()).toThrow(/expiry/i)
+  })
+
+  test('should throw if keyId is an empty string', () => {
+    expect(() => baseImage().signingKey('', privateKey).expiry(expiry).signedUrl()).toThrow(
+      /keyId/i
+    )
+  })
+
+  test('should throw if privateKey is an empty string', () => {
+    expect(() => baseImage().signingKey(keyId, '').expiry(expiry).signedUrl()).toThrow(
+      /privateKey/i
+    )
+  })
+
+  test('should throw if expiry is an empty string', () => {
+    expect(() => baseImage().signingKey(keyId, privateKey).expiry('').signedUrl()).toThrow(
+      /expiry/i
+    )
+  })
+
+  test('should include expiry parameter in URL', () => {
     const url = baseImage().signingKey(keyId, privateKey).expiry(expiry).signedUrl()
     expect(qp(url, 'expiry')).toBe(expiry)
   })
@@ -85,13 +107,28 @@ describe('signed-builder', () => {
   })
 
   test('should append signature as the last query parameter', () => {
-    const url = baseImage().width(320).signingKey(keyId, privateKey).height(240).signedUrl()
+    const url = baseImage()
+      .width(320)
+      .signingKey(keyId, privateKey)
+      .height(240)
+      .expiry(expiry)
+      .signedUrl()
     expect(lastParam(url).key).toBe('signature')
   })
 
   test('should produce signature independent of options call order', () => {
-    const a = baseImage().width(320).height(240).signingKey(keyId, privateKey).signedUrl()
-    const b = baseImage().height(240).signingKey(keyId, privateKey).width(320).signedUrl()
+    const a = baseImage()
+      .width(320)
+      .height(240)
+      .signingKey(keyId, privateKey)
+      .expiry(expiry)
+      .signedUrl()
+    const b = baseImage()
+      .height(240)
+      .signingKey(keyId, privateKey)
+      .width(320)
+      .expiry(expiry)
+      .signedUrl()
     expect(qp(a, 'signature')).toBe(qp(b, 'signature'))
   })
 
@@ -129,24 +166,33 @@ describe('signed-builder', () => {
     const builder = createImageUrlBuilder(client)
       .image('image-928ac96d53b0c9049836c86ff25fd3c009039a16-200x200-png')
       .signingKey(keyId, privateKey)
+      .expiry(expiry)
     expect(() => builder.signedUrl()).not.toThrow()
   })
 
   test('should change signature when options change', () => {
-    const url1 = baseImage().withOptions({w: 320}).signingKey(keyId, privateKey).signedUrl()
-    const url2 = baseImage().withOptions({w: 321}).signingKey(keyId, privateKey).signedUrl()
+    const url1 = baseImage()
+      .withOptions({w: 320})
+      .signingKey(keyId, privateKey)
+      .expiry(expiry)
+      .signedUrl()
+    const url2 = baseImage()
+      .withOptions({w: 321})
+      .signingKey(keyId, privateKey)
+      .expiry(expiry)
+      .signedUrl()
     expect(qp(url1, 'signature')).not.toBe(qp(url2, 'signature'))
   })
 
   test('should produce URL-safe base64 signature with padding', () => {
-    const url = baseImage().signingKey(keyId, privateKey).signedUrl()
+    const url = baseImage().signingKey(keyId, privateKey).expiry(expiry).signedUrl()
     const signature = qp(url, 'signature')!
     expect(/^[A-Za-z0-9\-_]+={0,2}$/.test(signature)).toBe(true)
     expect(signature.length % 4).toBe(0)
   })
 
   test('should be idempotent when calling signedUrl() repeatedly', () => {
-    const builder = baseImage().signingKey(keyId, privateKey)
+    const builder = baseImage().signingKey(keyId, privateKey).expiry(expiry)
     const a = builder.signedUrl()
     const b = builder.signedUrl()
     expect(a).toBe(b)
@@ -155,7 +201,7 @@ describe('signed-builder', () => {
   test('should merge and override correctly when using withOptions', () => {
     const url = baseImage()
       .withOptions({keyId: 'replace', privateKey})
-      .withOptions({keyId})
+      .withOptions({keyId, expiry})
       .signedUrl()
     expect(qp(url, 'keyid')).toBe(keyId)
     expect(qp(url, 'signature')).toBeTruthy()
