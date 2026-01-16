@@ -107,6 +107,11 @@ export interface SanityClientConfig {
   projectId?: string
   apiHost?: string
   /** @internal */
+  resource?: SanityClientConfigResource
+  /**
+   * @deprecated Use `resource` instead
+   * @internal
+   */
   '~experimental_resource'?: SanityClientConfigResource
 }
 

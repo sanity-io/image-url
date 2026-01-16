@@ -41,7 +41,7 @@ describe('init from client', () => {
     const client = {
       config: () => ({
         apiHost: 'https://api.sanity.io',
-        '~experimental_resource': {type: 'media-library' as const, id: 'library123'},
+        resource: {type: 'media-library' as const, id: 'library123'},
       }),
     }
 
@@ -62,7 +62,7 @@ describe('init from client', () => {
     const mediaClient = {
       clientConfig: {
         apiHost: 'https://api.sanity.io',
-        '~experimental_resource': {type: 'media-library' as const, id: 'library123'},
+        resource: {type: 'media-library' as const, id: 'library123'},
       },
     }
 
@@ -85,7 +85,7 @@ describe('init from client', () => {
     const mediaClient = {
       clientConfig: {
         apiHost: 'https://api.sanity.io',
-        '~experimental_resource': {type: 'media-library' as const, id: 'library123'},
+        resource: {type: 'media-library' as const, id: 'library123'},
       },
     }
 
@@ -99,6 +99,33 @@ describe('init from client', () => {
 
     expect(datasetBuilder.toString()).toBe(
       'https://cdn.otherhost.io/images/proj123/animals/abc123-200x200.png?w=320'
+    )
+  })
+
+  test('resource takes precedence over ~experimental_resource when both are present', () => {
+    const client = {
+      clientConfig: {
+        apiHost: 'https://api.sanity.io',
+        resource: {type: 'media-library' as const, id: 'new-library'},
+        '~experimental_resource': {type: 'media-library' as const, id: 'old-library'},
+      },
+    }
+
+    expect(createImageUrlBuilder(client).image('image-abc123-200x200-png').toString()).toBe(
+      'https://cdn.sanity.io/media-libraries/new-library/images/abc123-200x200.png'
+    )
+  })
+
+  test('throws error when resource is missing id', () => {
+    const client = {
+      clientConfig: {
+        apiHost: 'https://api.sanity.io',
+        resource: {type: 'media-library' as const, id: ''},
+      },
+    }
+
+    expect(() => createImageUrlBuilder(client)).toThrow(
+      'Media library clients must include an id in "resource"'
     )
   })
 })
