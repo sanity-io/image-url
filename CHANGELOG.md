@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.0.3
+
+### Patch Changes
+
+- [#95](https://github.com/sanity-io/image-url/pull/95) [`ee18507`](https://github.com/sanity-io/image-url/commit/ee18507d46497fb19bc5a7449b131408efc83aac) Thanks [@rdunk](https://github.com/rdunk)! - Enforce expiry as a required parameter for signed URLs.
+
 ## 2.0.2
 
 ### Patch Changes
