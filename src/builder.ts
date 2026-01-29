@@ -38,10 +38,11 @@ function clientConfigToOptions(config: SanityClientConfig): ImageUrlBuilderOptio
     baseUrl: apiHost.replace(/^https:\/\/api\./, 'https://cdn.'),
   }
 
-  const resource = config['~experimental_resource']
+  // Support deprecated ~experimental_resource for backward compatibility
+  const resource = config.resource ?? config['~experimental_resource']
   if (resource?.type === 'media-library') {
     if (typeof resource.id !== 'string' || resource.id.length === 0) {
-      throw new Error('Media library clients must include an id in "~experimental_resource"')
+      throw new Error('Media library clients must include an id in "resource"')
     }
 
     return {...baseOptions, mediaLibraryId: resource.id}
