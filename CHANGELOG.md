@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.1.0
+
+### Minor Changes
+
+- [#97](https://github.com/sanity-io/image-url/pull/97) [`25eefd4`](https://github.com/sanity-io/image-url/commit/25eefd4045085571d98742d3014659aa9d940c24) Thanks [@rdunk](https://github.com/rdunk)! - Add support for clients configured with the `resource` property, mark `~experimental_resource` as deprecated.
+
 ## 2.0.3
 
 ### Patch Changes
