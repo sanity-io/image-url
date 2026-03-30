@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.1.1
+
+### Patch Changes
+
+- [#103](https://github.com/sanity-io/image-url/pull/103) [`135943c`](https://github.com/sanity-io/image-url/commit/135943cda8c549f6e59b31bb844045d99e68c0c9) Thanks [@cngonzalez](https://github.com/cngonzalez)! - Ensures that passing a `canvas` or `dataset` resource will create a valid URL
+
 ## 2.1.0
 
 ### Minor Changes
