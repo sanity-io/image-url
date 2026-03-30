@@ -128,4 +128,56 @@ describe('init from client', () => {
       'Media library clients must include an id in "resource"'
     )
   })
+
+  test('can get canvas base url from client config', () => {
+    const client = {
+      clientConfig: {
+        apiHost: 'https://api.sanity.io',
+        resource: {type: 'canvas' as const, id: 'cag5gSK37IGV'},
+      },
+    }
+
+    expect(createImageUrlBuilder(client).image('image-abc123-200x200-png').toString()).toBe(
+      'https://cdn.sanity.io/images/canvases/cag5gSK37IGV/abc123-200x200.png'
+    )
+  })
+
+  test('throws error when canvas resource is missing id', () => {
+    const client = {
+      clientConfig: {
+        apiHost: 'https://api.sanity.io',
+        resource: {type: 'canvas' as const, id: ''},
+      },
+    }
+
+    expect(() => createImageUrlBuilder(client)).toThrow(
+      'Canvas clients must include an id in "resource"'
+    )
+  })
+
+  test('dataset resource type derives projectId and dataset from resource id', () => {
+    const client = {
+      clientConfig: {
+        apiHost: 'https://api.sanity.io',
+        resource: {type: 'dataset' as const, id: 'abc123.foo'},
+      },
+    }
+
+    expect(createImageUrlBuilder(client).image('image-abc123-200x200-png').toString()).toBe(
+      'https://cdn.sanity.io/images/abc123/foo/abc123-200x200.png'
+    )
+  })
+
+  test('throws error when dataset resource is missing id', () => {
+    const client = {
+      clientConfig: {
+        apiHost: 'https://api.sanity.io',
+        resource: {type: 'dataset' as const, id: ''},
+      },
+    }
+
+    expect(() => createImageUrlBuilder(client)).toThrow(
+      'Dataset clients must include an id in "resource"'
+    )
+  })
 })

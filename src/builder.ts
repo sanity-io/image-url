@@ -48,6 +48,23 @@ function clientConfigToOptions(config: SanityClientConfig): ImageUrlBuilderOptio
     return {...baseOptions, mediaLibraryId: resource.id}
   }
 
+  if (resource?.type === 'canvas') {
+    if (typeof resource.id !== 'string' || resource.id.length === 0) {
+      throw new Error('Canvas clients must include an id in "resource"')
+    }
+
+    return {...baseOptions, canvasId: resource.id}
+  }
+
+  if (resource?.type === 'dataset') {
+    if (typeof resource.id !== 'string' || resource.id.length === 0) {
+      throw new Error('Dataset clients must include an id in "resource"')
+    }
+
+    const [resourceProjectId, resourceDataset] = resource.id.split('.')
+    return {...baseOptions, projectId: resourceProjectId, dataset: resourceDataset}
+  }
+
   return {...baseOptions, projectId, dataset}
 }
 
@@ -170,6 +187,7 @@ export class ImageUrlBuilderImpl implements ImageUrlBuilder {
     delete preservedOptions.projectId
     delete preservedOptions.dataset
     delete preservedOptions.mediaLibraryId
+    delete preservedOptions.canvasId
 
     return new ImageUrlBuilderImpl(null, {...newOptions, ...preservedOptions}) as this
   }
