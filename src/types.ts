@@ -4,6 +4,7 @@
 export type ImageUrlBuilderOptions = Partial<SanityProjectDetails> & {
   baseUrl?: string
   mediaLibraryId?: string
+  canvasId?: string
   source?: SanityImageSource
   bg?: string
   dpr?: number
@@ -95,7 +96,7 @@ export type Orientation = 0 | 90 | 180 | 270
  * @internal
  */
 export interface SanityClientConfigResource {
-  type: 'media-library' | (string & {})
+  type: 'media-library' | 'canvas' | 'dataset' | (string & {})
   id: string
 }
 
