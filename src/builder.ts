@@ -62,6 +62,12 @@ function clientConfigToOptions(config: SanityClientConfig): ImageUrlBuilderOptio
     }
 
     const [resourceProjectId, resourceDataset] = resource.id.split('.')
+    if (!resourceProjectId || !resourceDataset) {
+      throw new Error(
+        'Dataset resource id must be in the format "projectId.dataset", got: ' + resource.id
+      )
+    }
+
     return {...baseOptions, projectId: resourceProjectId, dataset: resourceDataset}
   }
 

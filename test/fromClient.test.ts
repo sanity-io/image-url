@@ -155,6 +155,19 @@ describe('init from client', () => {
     )
   })
 
+  test('throws error when dataset resource id is malformed', () => {
+    const client = {
+      clientConfig: {
+        apiHost: 'https://api.sanity.io',
+        resource: {type: 'dataset' as const, id: 'nodot'},
+      },
+    }
+
+    expect(() => createImageUrlBuilder(client)).toThrow(
+      'Dataset resource id must be in the format "projectId.dataset", got: nodot'
+    )
+  })
+
   test('dataset resource type derives projectId and dataset from resource id', () => {
     const client = {
       clientConfig: {
