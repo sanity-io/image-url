@@ -54,7 +54,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "@changesets/changelog-github": "^0.5.1",
+    "@changesets/changelog-github": "^1.0.1",
     "@changesets/cli": "^2.29.6",
     "@sanity/client": "^6.22.2",
     "@sanity/pkg-utils": "^8.0.3",
