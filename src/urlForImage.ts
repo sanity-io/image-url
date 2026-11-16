@@ -1,7 +1,9 @@
+import {hotspotCenter, intentParams, isFullImage} from './imageIntent'
 import {parseAssetId} from './parseAssetId'
 import {parseSource, isInProgressUpload} from './parseSource'
 import type {
   CropSpec,
+  FitMode,
   HotspotSpec,
   ImageUrlBuilderOptions,
   ImageUrlBuilderOptionsWithAsset,
@@ -77,17 +79,21 @@ export function urlForImage(options: ImageUrlBuilderOptions): string {
     bottom: hotSpotCenterY + hotSpotVerticalRadius,
   }
 
+  // An explicit rect replaces the crop and hotspot, so there is no intent left to record
+  const recordsIntent = !(spec.rect || spec.ignoreImageParams)
+
   // If irrelevant, or if we are requested to: don't perform crop/fit based on
   // the crop/hotspot.
   if (!(spec.rect || spec.focalPoint || spec.ignoreImageParams || spec.crop)) {
     spec = {...spec, ...fit({crop, hotspot}, spec)}
   }
 
-  return specToImageUrl({...spec, asset})
+  const intent = recordsIntent ? intentParams({asset, crop, hotspot}) : []
+  return specToImageUrl({...spec, asset}, intent)
 }
 
 // eslint-disable-next-line complexity
-function specToImageUrl(spec: ImageUrlBuilderOptionsWithAsset) {
+function specToImageUrl(spec: ImageUrlBuilderOptionsWithAsset, intent: string[]) {
   const cdnUrl = (spec.baseUrl || 'https://cdn.sanity.io').replace(/\/+$/, '')
   const vanityStub = spec.vanityName ? `/${spec.vanityName}` : ''
   const filename = `${spec.asset.id}-${spec.asset.width}x${spec.asset.height}.${spec.asset.format}${vanityStub}`
@@ -102,15 +108,10 @@ function specToImageUrl(spec: ImageUrlBuilderOptionsWithAsset) {
 
   const params: string[] = []
 
-  if (spec.rect) {
-    // Only bother url with a crop if it actually crops anything
+  // Only bother url with a crop if it actually crops anything
+  if (spec.rect && !isFullImage(spec.rect, spec.asset)) {
     const {left, top, width, height} = spec.rect
-    const isEffectiveCrop =
-      left !== 0 || top !== 0 || height !== spec.asset.height || width !== spec.asset.width
-
-    if (isEffectiveCrop) {
-      params.push(`rect=${left},${top},${width},${height}`)
-    }
+    params.push(`rect=${left},${top},${width},${height}`)
   }
 
   if (spec.bg) {
@@ -137,6 +138,8 @@ function specToImageUrl(spec: ImageUrlBuilderOptionsWithAsset) {
     }
   })
 
+  params.push(...intent)
+
   if (params.length === 0) {
     return baseUrl
   }
@@ -153,8 +156,9 @@ function fit(
   const imgWidth = spec.width
   const imgHeight = spec.height
 
-  // If we are not constraining the aspect ratio, we'll just use the whole crop
-  if (!(imgWidth && imgHeight)) {
+  // If we are not constraining the aspect ratio, or the fit mode keeps the whole image
+  // within the requested box, we'll just use the whole crop
+  if (!(imgWidth && imgHeight) || !cropsToAspectRatio(spec.fit)) {
     return {width: imgWidth, height: imgHeight, rect: source.crop}
   }
 
@@ -172,7 +176,7 @@ function fit(
     const top = Math.max(0, Math.round(crop.top))
 
     // Center output horizontally over hotspot
-    const hotspotXCenter = Math.round((hotspot.right - hotspot.left) / 2 + hotspot.left)
+    const hotspotXCenter = hotspotCenter(hotspot).x
     let left = Math.max(0, Math.round(hotspotXCenter - width / 2))
 
     // Keep output within crop
@@ -190,7 +194,7 @@ function fit(
     const left = Math.max(0, Math.round(crop.left))
 
     // Center output vertically over hotspot
-    const hotspotYCenter = Math.round((hotspot.bottom - hotspot.top) / 2 + hotspot.top)
+    const hotspotYCenter = hotspotCenter(hotspot).y
     let top = Math.max(0, Math.round(hotspotYCenter - height / 2))
 
     // Keep output rect within crop
@@ -207,5 +211,31 @@ function fit(
     width: imgWidth,
     height: imgHeight,
     rect: cropRect,
+  }
+}
+
+/**
+ * Whether the requested width and height should be matched by cropping the image
+ * around its hotspot. The Image API only honours a focal point with `fit=crop`
+ * and `crop=focalpoint`, so cropping modes are emulated with a `rect` instead.
+ * The other modes keep the whole image, and a `rect` would cut parts of it off.
+ */
+function cropsToAspectRatio(fitMode: FitMode | undefined): boolean {
+  switch (fitMode) {
+    case undefined:
+    case 'crop':
+    case 'min':
+      return true
+    case 'clip':
+    case 'fill':
+    case 'fillmax':
+    case 'max':
+    case 'scale':
+      return false
+    default: {
+      // Unvalidated values can still arrive through `withOptions()`: keep cropping for those
+      const unhandled: never = fitMode
+      return typeof unhandled === 'string'
+    }
   }
 }
