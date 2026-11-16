@@ -180,6 +180,31 @@ describe('fit modes', () => {
       `${base}?rect=78,117,624,936&w=100&x-crop=78,117,624,936&x-hotspot=234,351,234,351`
     )
   })
+
+  test('vanity names that look like asset filenames do not replace the asset', () => {
+    const url = urlFor
+      .image(sources['crop+hotspot'])
+      .vanityName('product-800x600.jpg')
+      .size(300, 300)
+      .url()
+    expect(urlFor.image(url).width(100).url()).toBe(
+      `${base}?rect=78,117,624,936&w=100&x-crop=78,117,624,936&x-hotspot=234,351,234,351`
+    )
+  })
+
+  test('asset ids with underscores round-trip from a built URL', () => {
+    const underscoreRef = 'image-vK7bXJPEjVpL_C950gH1N73Zv14r7pYsbUdXl-4288x2848-jpg'
+    const underscoreBase =
+      'https://cdn.sanity.io/images/pv8y60vp/production/vK7bXJPEjVpL_C950gH1N73Zv14r7pYsbUdXl-4288x2848.jpg'
+    const source: SanityImageObject = {
+      asset: {_ref: underscoreRef},
+      crop: {top: 0.1, bottom: 0.1, left: 0.1, right: 0.1},
+      hotspot: {x: 0.3, y: 0.3, width: 0.3, height: 0.3},
+    }
+    const url = urlFor.image(source).width(80).url()
+    expect(url).toContain(underscoreBase)
+    expect(urlFor.image(url).width(100).url()).toBe(urlFor.image(source).width(100).url())
+  })
 })
 
 // The comparison from https://github.com/sanity-io/image-url/issues/32: every fit mode at

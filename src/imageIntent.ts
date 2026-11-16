@@ -77,7 +77,7 @@ export function intentParams(options: {
   return params
 }
 
-const ASSET_FILENAME_PATTERN = /^([a-zA-Z0-9]+)-(\d+x\d+)\.([a-z0-9]+)$/
+const ASSET_FILENAME_PATTERN = /^([a-zA-Z0-9_]+)-(\d+x\d+)\.([a-z0-9]+)$/
 
 /**
  * Resolves an image record from a Sanity CDN URL: the asset id from the filename (also when the
@@ -87,12 +87,11 @@ const ASSET_FILENAME_PATTERN = /^([a-zA-Z0-9]+)-(\d+x\d+)\.([a-z0-9]+)$/
  */
 export function imageFromUrl(url: string): SanityImageObject {
   const {pathname, searchParams} = new URL(url)
-  const filename = pathname
-    .split('/')
-    .reverse()
-    .find((segment) => ASSET_FILENAME_PATTERN.test(segment))
+  // Prefer the first matching segment so a vanity name like `product-800x600.jpg` is not
+  // mistaken for the asset filename that precedes it.
+  const filename = pathname.split('/').find((segment) => ASSET_FILENAME_PATTERN.test(segment))
   if (!filename) {
-    return {asset: {_ref: legacyUrlToId(url)}}
+    return {asset: {_ref: legacyUrlToId(pathname)}}
   }
 
   const [, id, dimensions, format] = ASSET_FILENAME_PATTERN.exec(filename)!
@@ -113,8 +112,8 @@ export function imageFromUrl(url: string): SanityImageObject {
   return image
 }
 
-function legacyUrlToId(url: string) {
-  const parts = url.split('/').slice(-1)
+function legacyUrlToId(pathname: string) {
+  const parts = pathname.split('/').slice(-1)
   return `image-${parts[0]}`.replace(/\.([a-z]+)$/, '-$1')
 }
 
