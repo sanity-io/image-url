@@ -1,3 +1,4 @@
+import {imageFromUrl} from './imageIntent'
 import type {
   SanityAsset,
   SanityImageObject,
@@ -43,10 +44,8 @@ export function parseSource(source?: SanityImageSource) {
   let image: SanityImageObject
 
   if (typeof source === 'string' && isUrl(source)) {
-    // Someone passed an existing image url?
-    image = {
-      asset: {_ref: urlToId(source)},
-    }
+    // Someone passed an existing image url? Keep the crop and hotspot it records
+    image = imageFromUrl(source)
   } else if (typeof source === 'string') {
     // Just an asset id
     image = {
@@ -68,7 +67,7 @@ export function parseSource(source?: SanityImageSource) {
     // If we were passed a partial asset (`url`, but no `_id`)
     image = {
       asset: {
-        _ref: urlToId(source.asset.url),
+        _ref: imageFromUrl(source.asset.url).asset._ref,
       },
     }
   } else if ('asset' in source && source.asset && typeof source.asset === 'object') {
@@ -94,11 +93,6 @@ export function parseSource(source?: SanityImageSource) {
 
 function isUrl(url: string) {
   return /^https?:\/\//.test(`${url}`)
-}
-
-function urlToId(url: string) {
-  const parts = url.split('/').slice(-1)
-  return `image-${parts[0]}`.replace(/\.([a-z]+)$/, '-$1')
 }
 
 const DEFAULT_CROP = {left: 0, top: 0, bottom: 0, right: 0}

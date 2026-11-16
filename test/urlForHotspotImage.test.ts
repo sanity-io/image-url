@@ -43,7 +43,7 @@ describe('urlForImage', () => {
     expect(
       urlForImage({source: uncroppedImage(), projectId: 'zp7mbokg', dataset: 'production'})
     ).toBe(
-      'https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000.jpg'
+      'https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000.jpg?x-hotspot=600,900,600,900'
     )
   })
 
@@ -56,7 +56,7 @@ describe('urlForImage', () => {
         width: 100,
       })
     ).toBe(
-      'https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000.jpg?w=100'
+      'https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000.jpg?w=100&x-hotspot=600,900,600,900'
     )
   })
 
@@ -69,7 +69,7 @@ describe('urlForImage', () => {
         height: 100,
       })
     ).toBe(
-      'https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000.jpg?h=100'
+      'https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000.jpg?h=100&x-hotspot=600,900,600,900'
     )
   })
 
@@ -83,7 +83,7 @@ describe('urlForImage', () => {
         height: 100,
       })
     ).toBe(
-      'https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000.jpg?rect=150,0,900,3000&w=30&h=100'
+      'https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000.jpg?rect=150,0,900,3000&w=30&h=100&x-hotspot=600,900,600,900'
     )
   })
 
@@ -97,7 +97,7 @@ describe('urlForImage', () => {
         height: 30,
       })
     ).toBe(
-      'https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000.jpg?rect=0,600,2000,600&w=100&h=30'
+      'https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000.jpg?rect=0,600,2000,600&w=100&h=30&x-hotspot=600,900,600,900'
     )
   })
 
@@ -111,7 +111,7 @@ describe('urlForImage', () => {
         height: 300,
       })
     ).toBe(
-      'https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000.jpg?w=200&h=300'
+      'https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000.jpg?w=200&h=300&x-hotspot=600,900,600,900'
     )
   })
 
@@ -119,7 +119,7 @@ describe('urlForImage', () => {
     expect(
       urlForImage({source: croppedImage(), projectId: 'zp7mbokg', dataset: 'production'})
     ).toBe(
-      'https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000.jpg?rect=200,300,1600,2400'
+      'https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000.jpg?rect=200,300,1600,2400&x-crop=200,300,1600,2400&x-hotspot=600,900,600,900'
     )
   })
 
@@ -133,7 +133,7 @@ describe('urlForImage', () => {
         height: 100,
       })
     ).toBe(
-      'https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000.jpg?rect=240,300,720,2400&w=30&h=100'
+      'https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000.jpg?rect=240,300,720,2400&w=30&h=100&x-crop=200,300,1600,2400&x-hotspot=600,900,600,900'
     )
   })
 
@@ -187,7 +187,7 @@ describe('urlForImage', () => {
         height: 100,
       })
     ).toBe(
-      'https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000.jpg?rect=200,300,1600,2400&h=100'
+      'https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000.jpg?rect=200,300,1600,2400&h=100&x-crop=200,300,1600,2400&x-hotspot=600,900,600,900'
     )
   })
 
@@ -201,7 +201,7 @@ describe('urlForImage', () => {
         height: 600,
       })
     ).toBe(
-      'https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-2555x3833.jpg?w=400&h=600'
+      'https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-2555x3833.jpg?w=400&h=600&x-hotspot=930,2246,1860,1860'
     )
 
     expect(
@@ -213,7 +213,7 @@ describe('urlForImage', () => {
         height: 400,
       })
     ).toBe(
-      'https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-3833x2555.jpg?w=600&h=400'
+      'https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-3833x2555.jpg?w=600&h=400&x-hotspot=2246,930,1860,1860'
     )
   })
 })
