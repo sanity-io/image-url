@@ -1,0 +1,8 @@
+lockfile:
+  format: v13
+
+minimumReleaseAgeExclude:
+  - '@tybys/wasm-util@0.10.5'
+
+allowBuilds:
+  esbuild: true
