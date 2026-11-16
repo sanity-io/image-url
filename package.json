@@ -95,5 +95,5 @@
   "dependencies": {
     "@sanity/signed-urls": "^2.0.2"
   },
-  "packageManager": "pnpm@10.15.0"
+  "packageManager": "pnpm@12.21.0"
 }
