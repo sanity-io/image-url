@@ -77,6 +77,24 @@ describe('parseSource', () => {
     expect(parseSource({})).toEqual(null)
   })
 
+  test('returns null on image with a null asset', () => {
+    expect(parseSource({_type: 'image', asset: null})).toEqual(null)
+  })
+
+  test('pads crop and hotspot with missing coordinates', () => {
+    expect(
+      parseSource({
+        asset: {_ref: 'image-Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000-jpg'},
+        crop: {_type: 'sanity.imageCrop', top: 0.1},
+        hotspot: {_type: 'sanity.imageHotspot', x: 0.2, y: null},
+      })
+    ).toEqual({
+      asset: {_ref: 'image-Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000-jpg'},
+      crop: {_type: 'sanity.imageCrop', top: 0.1, left: 0, bottom: 0, right: 0},
+      hotspot: {_type: 'sanity.imageHotspot', x: 0.2, y: 0.5, width: 1, height: 1},
+    })
+  })
+
   test('image with materialized asset, read-only', () => {
     const noCrop = Object.defineProperties(
       {_type: 'image'},

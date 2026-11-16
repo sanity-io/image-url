@@ -7,5 +7,9 @@ export default defineConfig({
       include: ['src/**/*.ts'],
       exclude: ['src/**/index.ts', 'src/**/types.ts', 'src/compat.ts'],
     },
+    typecheck: {
+      enabled: true,
+      tsconfig: './test/typegen/tsconfig.json',
+    },
   },
 })

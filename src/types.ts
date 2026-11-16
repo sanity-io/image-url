@@ -139,6 +139,8 @@ export type SanityImageSource =
   | SanityAsset
   | SanityImageObject
   | SanityImageWithAssetStub
+  | SanityImageLike
+  | SanityImageAssetLike
 
 /**
  * @public
@@ -235,6 +237,115 @@ export interface SanityImageObject {
   crop?: SanityImageCrop
   hotspot?: SanityImageHotspot
 }
+
+/**
+ * An image asset document, or a projection of one that keeps its `_id`
+ * (for example `asset->{_id, url}`).
+ *
+ * @public
+ */
+export interface SanityImageAssetLike {
+  _id: string
+  url?: string | null
+}
+
+/**
+ * An image object in any shape Sanity TypeGen generates for it: a raw image
+ * field, an image with `asset->` dereferenced, or a partial projection such as
+ * `image{asset, crop, hotspot}`. Custom image types with extra fields (`alt`,
+ * `caption`, ...) and any `_type` are accepted.
+ *
+ * `asset` is optional and nullable, matching TypeGen, since an image field can
+ * exist before an asset has been uploaded to it. Use {@link isImageWithAsset}
+ * to narrow a value to one that has an asset.
+ *
+ * @public
+ */
+export interface SanityImageLike {
+  asset?: SanityReference | {_id?: string | null; url?: string | null} | null
+  crop?: {
+    _type?: string
+    top?: number | null
+    bottom?: number | null
+    left?: number | null
+    right?: number | null
+  } | null
+  hotspot?: {
+    _type?: string
+    x?: number | null
+    y?: number | null
+    height?: number | null
+    width?: number | null
+  } | null
+}
+
+/**
+ * Narrows image types to the variant where `asset` is present and non-null.
+ *
+ * @public
+ */
+export type SanityImageWithAsset<T> = T extends {asset?: infer Asset}
+  ? T & {asset: NonNullable<Asset>}
+  : never
+
+type ReferenceTarget<T> = T[Extract<keyof T, symbol>]
+
+type IsImageAsset<T> = T extends {_type: 'sanity.fileAsset'}
+  ? false
+  : T extends {_ref: string}
+  ? 'sanity.fileAsset' extends ReferenceTarget<T>
+    ? false
+    : true
+  : T extends {_id: string}
+  ? true
+  : T extends object
+  ? 'url' extends keyof T
+    ? true
+    : false
+  : false
+
+type IsImage<T> = 'asset' extends keyof T
+  ? true extends IsImageAsset<NonNullable<T['asset' & keyof T]>>
+    ? true
+    : false
+  : false
+
+/**
+ * Collects every image shape found anywhere in `T`, which can be a TypeGen
+ * query result, a union of query results, or a schema type. An image is an
+ * object whose `asset` is an image asset reference, a dereferenced image asset
+ * or a projection of one. File fields are skipped. `null` and `undefined` are
+ * dropped.
+ *
+ * Use it to type a shared image component that accepts an image from any
+ * query:
+ *
+ * @example
+ * ```ts
+ * import type {SanityQueries} from '@sanity/client'
+ * import type {InferImageValue} from '@sanity/image-url'
+ *
+ * type ImageValue = InferImageValue<SanityQueries[keyof SanityQueries]>
+ * ```
+ *
+ * @public
+ */
+export type InferImageValue<T> = T extends readonly (infer Item)[]
+  ? InferImageValue<Item>
+  : T extends object
+  ? IsImage<T> extends true
+    ? T
+    : {[Key in keyof T]-?: InferImageValue<T[Key]>}[keyof T]
+  : never
+
+/**
+ * Same as {@link InferImageValue}, but only the variants that have an asset,
+ * which is what {@link isImageWithAsset} narrows to. Use it for props that
+ * should only ever receive an image that can produce a URL.
+ *
+ * @public
+ */
+export type InferStrictImageValue<T> = SanityImageWithAsset<InferImageValue<T>>
 
 /**
  * @public
