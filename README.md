@@ -47,6 +47,56 @@ There are a large number of useful options you can specify, like e.g. blur:
 
 Note that the `url()` function needs to be the final one in order to output the url as a string.
 
+## Usage with Sanity TypeGen
+
+`image()` accepts every image shape [Sanity TypeGen](https://www.sanity.io/docs/apis-and-sdks/sanity-typegen) generates, without casts: raw image fields, images with `asset->` dereferenced, partial projections like `image{asset, crop, hotspot}` or `asset->{_id, url}`, and custom image types with extra fields like `alt`. Query results are nullable, so narrow them before building a URL:
+
+```tsx
+import {createImageUrlBuilder, isImageWithAsset} from '@sanity/image-url'
+import {defineQuery} from 'groq'
+
+const builder = createImageUrlBuilder(client)
+const query = defineQuery(`*[_type == "post" && slug.current == $slug][0]{title, cover}`)
+const post = await client.fetch(query, {slug})
+
+// `cover` is `null` when the field is unset, and has no `asset` until an image is uploaded
+if (isImageWithAsset(post?.cover)) {
+  console.log(builder.image(post.cover).width(800).url())
+}
+```
+
+To type a shared image component that accepts an image from any of your queries, use `InferImageValue`. It collects every image shape from the types you pass it, such as all the queries TypeGen registered. `InferStrictImageValue` does the same, but only keeps the variants that have an asset, which is what `isImageWithAsset` narrows to:
+
+```tsx
+import type {SanityQueries} from '@sanity/client'
+import {
+  createImageUrlBuilder,
+  isImageWithAsset,
+  type InferImageValue,
+  type InferStrictImageValue,
+} from '@sanity/image-url'
+
+const builder = createImageUrlBuilder(client)
+
+type ImageValue = InferImageValue<SanityQueries[keyof SanityQueries]>
+
+export function SanityImage({value, width}: {value: ImageValue; width: number}) {
+  if (!isImageWithAsset(value)) return null
+  return (
+    <img src={builder.image(value).width(width).url()} alt={('alt' in value && value.alt) || ''} />
+  )
+}
+
+// Or require callers to pass an image that has an asset:
+export function StrictSanityImage({
+  value,
+}: {
+  value: InferStrictImageValue<SanityQueries[keyof SanityQueries]>
+}) {
+  return <img src={builder.image(value).width(800).url()} />
+}
+```
+
 ## Builder methods
 
 ### `image(source)`

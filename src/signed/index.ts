@@ -2,6 +2,7 @@ import {defineDeprecated} from '../compat'
 import {createImageUrlBuilder} from './signed-builder'
 
 export {createImageUrlBuilder} from './signed-builder'
+export {isImageWithAsset} from '../isImageWithAsset'
 
 export type {
   AutoMode,
@@ -13,17 +14,22 @@ export type {
   ImageUrlBuilderOptions,
   ImageUrlBuilderOptionsWithAliases,
   ImageUrlBuilderOptionsWithAsset,
+  InferImageValue,
+  InferStrictImageValue,
   Orientation,
   SanityAsset,
   SanityClientConfig,
   SanityClientLike,
+  SanityImageAssetLike,
   SanityImageCrop,
   SanityImageDimensions,
   SanityImageFitResult,
   SanityImageHotspot,
+  SanityImageLike,
   SanityImageObject,
   SanityImageRect,
   SanityImageSource,
+  SanityImageWithAsset,
   SanityImageWithAssetStub,
   SanityModernClientLike,
   SanityProjectDetails,

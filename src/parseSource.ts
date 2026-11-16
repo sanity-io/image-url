@@ -71,9 +71,9 @@ export function parseSource(source?: SanityImageSource) {
         _ref: urlToId(source.asset.url),
       },
     }
-  } else if (typeof source.asset === 'object') {
+  } else if ('asset' in source && source.asset && typeof source.asset === 'object') {
     // Probably an actual image with materialized asset
-    image = {...source}
+    image = {...(source as SanityImageObject)}
   } else {
     // We got something that does not look like an image, or it is an image
     // that currently isn't sporting an asset.
@@ -101,32 +101,41 @@ function urlToId(url: string) {
   return `image-${parts[0]}`.replace(/\.([a-z]+)$/, '-$1')
 }
 
-// Mock crop and hotspot if image lacks it
+const DEFAULT_CROP = {left: 0, top: 0, bottom: 0, right: 0}
+const DEFAULT_HOTSPOT = {x: 0.5, y: 0.5, height: 1.0, width: 1.0}
+
+// Mock crop and hotspot if image lacks it, or lacks some of their coordinates
 function applyDefaults(image: SanityImageObject) {
-  if (image.crop && image.hotspot) {
+  if (isComplete(image.crop, DEFAULT_CROP) && isComplete(image.hotspot, DEFAULT_HOTSPOT)) {
     return image as Required<SanityImageObject>
   }
 
-  // We need to pad in default values for crop or hotspot
-  const result = {...image}
+  const result: Required<SanityImageObject> = {
+    ...image,
+    crop: withDefaults(image.crop, DEFAULT_CROP),
+    hotspot: withDefaults(image.hotspot, DEFAULT_HOTSPOT),
+  }
+  return result
+}
 
-  if (!result.crop) {
-    result.crop = {
-      left: 0,
-      top: 0,
-      bottom: 0,
-      right: 0,
-    }
+function isComplete(value: object | undefined, defaults: Record<string, number>) {
+  if (!value) {
+    return false
+  }
+  const record = value as Record<string, unknown>
+  return Object.keys(defaults).every((key) => typeof record[key] === 'number')
+}
+
+function withDefaults<T extends Record<string, number>>(value: object | undefined, defaults: T): T {
+  if (isComplete(value, defaults)) {
+    return value as T
   }
 
-  if (!result.hotspot) {
-    result.hotspot = {
-      x: 0.5,
-      y: 0.5,
-      height: 1.0,
-      width: 1.0,
+  const result: Record<string, unknown> = {...value}
+  for (const key of Object.keys(defaults)) {
+    if (typeof result[key] !== 'number') {
+      result[key] = defaults[key]
     }
   }
-
-  return result as Required<SanityImageObject>
+  return result as T
 }
