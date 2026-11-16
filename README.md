@@ -180,6 +180,8 @@ Specifies how to crop the image. When specified, overrides any crop or hotspot i
 
 Configures the fit mode. See the [documentation](https://www.sanity.io/docs/image-urls#fit-45b29dc6f09f) for details.
 
+When both width and height are set, the image is cropped to that aspect ratio around the hotspot if no fit mode is given, or with `crop` and `min`. The other fit modes (`clip`, `fill`, `fillmax`, `max`, `scale`) keep the whole image, so only the crop from the image record is applied.
+
 ### `dpr(value)`
 
 Specifies device pixel ratio scaling factor. From 1 to 3.

@@ -216,4 +216,68 @@ describe('urlForImage', () => {
       'https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-3833x2555.jpg?w=600&h=400'
     )
   })
+
+  describe('fit modes', () => {
+    const base =
+      'https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000.jpg'
+    const nonCroppingFits = ['clip', 'fill', 'fillmax', 'max', 'scale'] as const
+    const croppingFits = ['crop', 'min'] as const
+
+    test.each(nonCroppingFits)(
+      'fit=%s with width and height does not add a rect to an uncropped image',
+      (fit) => {
+        expect(
+          urlForImage({
+            source: uncroppedImage(),
+            projectId: 'zp7mbokg',
+            dataset: 'production',
+            width: 300,
+            height: 300,
+            fit,
+          })
+        ).toBe(`${base}?w=300&h=300&fit=${fit}`)
+      }
+    )
+
+    test.each(nonCroppingFits)(
+      'fit=%s with width and height only applies the source crop',
+      (fit) => {
+        expect(
+          urlForImage({
+            source: croppedImage(),
+            projectId: 'zp7mbokg',
+            dataset: 'production',
+            width: 300,
+            height: 300,
+            fit,
+          })
+        ).toBe(`${base}?rect=200,300,1600,2400&w=300&h=300&fit=${fit}`)
+      }
+    )
+
+    test.each(croppingFits)('fit=%s with width and height crops around the hotspot', (fit) => {
+      expect(
+        urlForImage({
+          source: uncroppedImage(),
+          projectId: 'zp7mbokg',
+          dataset: 'production',
+          width: 300,
+          height: 300,
+          fit,
+        })
+      ).toBe(`${base}?rect=0,0,2000,2000&w=300&h=300&fit=${fit}`)
+    })
+
+    test('no fit with width and height crops around the hotspot', () => {
+      expect(
+        urlForImage({
+          source: uncroppedImage(),
+          projectId: 'zp7mbokg',
+          dataset: 'production',
+          width: 300,
+          height: 300,
+        })
+      ).toBe(`${base}?rect=0,0,2000,2000&w=300&h=300`)
+    })
+  })
 })

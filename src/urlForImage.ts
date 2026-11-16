@@ -2,6 +2,7 @@ import {parseAssetId} from './parseAssetId'
 import {parseSource, isInProgressUpload} from './parseSource'
 import type {
   CropSpec,
+  FitMode,
   HotspotSpec,
   ImageUrlBuilderOptions,
   ImageUrlBuilderOptionsWithAsset,
@@ -153,8 +154,9 @@ function fit(
   const imgWidth = spec.width
   const imgHeight = spec.height
 
-  // If we are not constraining the aspect ratio, we'll just use the whole crop
-  if (!(imgWidth && imgHeight)) {
+  // If we are not constraining the aspect ratio, or the fit mode keeps the whole image
+  // within the requested box, we'll just use the whole crop
+  if (!(imgWidth && imgHeight) || !cropsToAspectRatio(spec.fit)) {
     return {width: imgWidth, height: imgHeight, rect: source.crop}
   }
 
@@ -207,5 +209,31 @@ function fit(
     width: imgWidth,
     height: imgHeight,
     rect: cropRect,
+  }
+}
+
+/**
+ * Whether the requested width and height should be matched by cropping the image
+ * around its hotspot. The Image API only honours a focal point with `fit=crop`
+ * and `crop=focalpoint`, so cropping modes are emulated with a `rect` instead.
+ * The other modes keep the whole image, and a `rect` would cut parts of it off.
+ */
+function cropsToAspectRatio(fitMode: FitMode | undefined): boolean {
+  switch (fitMode) {
+    case undefined:
+    case 'crop':
+    case 'min':
+      return true
+    case 'clip':
+    case 'fill':
+    case 'fillmax':
+    case 'max':
+    case 'scale':
+      return false
+    default: {
+      // Unvalidated values can still arrive through `withOptions()`: keep cropping for those
+      const unhandled: never = fitMode
+      return typeof unhandled === 'string'
+    }
   }
 }
