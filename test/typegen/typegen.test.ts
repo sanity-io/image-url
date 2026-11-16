@@ -65,7 +65,7 @@ describe('TypeGen shaped values', () => {
       hotspot: {_type: 'sanity.imageHotspot', x: 0.5, y: 0.25, width: 1, height: 0.5},
     }
     expect(builder.image(figure!).width(100).height(100).url()).toBe(
-      `${assetUrl}?rect=250,0,1500,1500&w=100&h=100`
+      `${assetUrl}?rect=250,0,1500,1500&w=100&h=100&x-crop=0,0,2000,1500&x-hotspot=1000,750,2000,1500`
     )
   })
 

@@ -101,7 +101,19 @@ export function StrictSanityImage({
 
 ### `image(source)`
 
-Specify the image to be rendered. Accepts either a Sanity `image` record, an `asset` record, or just the asset id as a string. In order for hotspot/crop processing to be applied, the `image` record must be supplied, as well as both width and height.
+Specify the image to be rendered. Accepts either a Sanity `image` record, an `asset` record, the asset id as a string, or an image URL. In order for hotspot/crop processing to be applied, the `image` record (or a URL built from one) must be supplied, as well as both width and height.
+
+URLs built from an `image` record with a crop or hotspot record them in `x-crop` and `x-hotspot` search params, which the Image API ignores. Passing such a URL to `image()` restores the crop and hotspot, so a resized URL gets the same `rect` as building it from the `image` record:
+
+```ts
+const url = builder.image(doc.image).width(300).height(300).url()
+// …/abc-780x1170.jpg?rect=78,117,624,624&w=300&h=300&x-crop=78,117,624,936&x-hotspot=234,351,234,351
+
+builder.image(url).width(600).height(200).fit('max').url()
+// …/abc-780x1170.jpg?rect=78,117,624,936&w=600&h=200&fit=max&x-crop=78,117,624,936&x-hotspot=234,351,234,351
+```
+
+Other search params of the URL, including `rect`, are not carried over: `rect` depends on the dimensions and fit mode it was built for.
 
 ### `dataset(dataset)`, `projectId(projectId)`
 
@@ -144,7 +156,7 @@ Apply image processing.
 
 ### `rect(left, top, width, height)`
 
-Specify the crop in pixels. Overrides any crop/hotspot in the image record.
+Specify the crop in pixels. Overrides any crop/hotspot in the image record, which is then not recorded in the URL.
 
 ### `format(name)`
 
@@ -180,6 +192,8 @@ Specifies how to crop the image. When specified, overrides any crop or hotspot i
 
 Configures the fit mode. See the [documentation](https://www.sanity.io/docs/image-urls#fit-45b29dc6f09f) for details.
 
+When both width and height are set, the image is cropped to that aspect ratio around the hotspot (with a `rect`) if no fit mode is given, or with `crop` and `min`. The other fit modes (`clip`, `fill`, `fillmax`, `max`, `scale`) keep the whole image, so only the crop from the image record is applied, and no `rect` is added for an image without a crop.
+
 ### `dpr(value)`
 
 Specifies device pixel ratio scaling factor. From 1 to 3.
@@ -190,7 +204,7 @@ Adjusts the saturation of the image. Currently the only supported value is `-100
 
 ### `ignoreImageParams()`
 
-Ignore any specifications from the image record (i.e. crop and hotspot).
+Ignore any specifications from the image record (i.e. crop and hotspot). They are then not recorded in the URL either.
 
 ### `url()`, `toString()`
 

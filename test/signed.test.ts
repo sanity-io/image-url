@@ -39,6 +39,18 @@ describe('signed-builder', () => {
     }
   })
 
+  test('resizing a signed url keeps the crop and hotspot and signs the new url', () => {
+    const signed = baseImage().size(300, 300).signingKey(keyId, privateKey).expiry(expiry)
+    const resized = signed.image(signed.signedUrl()).width(600).height(200).fit('max')
+
+    const url = resized.signedUrl()
+    expect(qp(url, 'rect')).toBe('200,300,1600,2400')
+    expect(qp(url, 'x-crop')).toBe('200,300,1600,2400')
+    expect(qp(url, 'x-hotspot')).toBe('600,900,600,900')
+    expect(new URL(url).searchParams.getAll('signature')).toHaveLength(1)
+    expect(resized.url()).toBe(baseImage().width(600).height(200).fit('max').url())
+  })
+
   test('should throw if signedUrl is called without signing options', () => {
     expect(() => baseImage().signedUrl()).toThrow()
   })
