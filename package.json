@@ -95,5 +95,10 @@
   "dependencies": {
     "@sanity/signed-urls": "^2.0.2"
   },
-  "packageManager": "pnpm@10.15.0"
+  "packageManager": "pnpm@10.15.0",
+  "pnpm": {
+    "overrides": {
+      "vite@7": "7.3.8"
+    }
+  }
 }
